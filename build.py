@@ -33,6 +33,31 @@ ERAS = [
     (2000, 3000,    "現代"),
 ]
 
+# 解剖図譜調のSVGライン画（カテゴリ別・stroke=currentColorで色を継承）
+ICON_PATHS = {
+    "skin_graft":   '<rect x="4" y="6.5" width="16" height="11" rx="2"/><path d="M8 10l1.6 2M12 10l1.6 2M16 10l1.6 2M8 13.5l1.6 2M12 13.5l1.6 2M16 13.5l1.6 2"/>',
+    "local_flap":   '<line x1="12" y1="4" x2="12" y2="20"/><path d="M12 8 L6 6.2 L8.2 12 Z"/><path d="M12 16 L18 17.8 L15.8 12 Z"/>',
+    "named_flap":   '<ellipse cx="13" cy="10" rx="6" ry="4.4" transform="rotate(-18 13 10)"/><path d="M8.6 13C6.7 15.4 6.2 18 6.7 20"/><path d="M13 7.6 L12 13"/>',
+    "micro":        '<path d="M5 16C9 8 15 6 19 8"/><circle cx="5" cy="16" r="1.1"/><path d="M19 8c-2 2-3 4-2 6" stroke-dasharray="2 2"/>',
+    "craniofacial": '<path d="M5 11.5C5 6.5 9 4.2 13 5.2C18 6.2 19 11 17 13L17 16c0 1-1 2-2 2h-2v2h-3v-3c-3-1-5-3-5-5.5Z"/><circle cx="9.2" cy="11.2" r="1.3"/>',
+    "history":      '<path d="M12 6.2C10 5.2 6 5.2 4 6.2V18c2-1 6-1 8 0 2-1 6-1 8 0V6.2c-2-1-6-1-8 0Z"/><line x1="12" y1="6.2" x2="12" y2="18"/>',
+    "extra":        '<path d="M9.5 4h5M10.5 4v5.5L5.6 18c-.6 1.3.4 2.5 1.9 2.5h9c1.5 0 2.5-1.2 1.9-2.5L13.5 9.5V4"/><line x1="8.4" y1="15" x2="15.6" y2="15"/>',
+}
+
+def icon(key, cls=""):
+    p = ICON_PATHS.get(key, "")
+    return (f'<svg class="ic {cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            f'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{p}</svg>')
+
+# ヘッダーの装飾エンブレム（回転皮弁の弧＋縫合線＝外科モチーフ）
+HERO_SVG = ('<svg class="hero-emblem" viewBox="0 0 120 120" fill="none" stroke="currentColor" '
+            'stroke-width="1.4" stroke-linecap="round" aria-hidden="true">'
+            '<path class="arc" d="M18 96 A78 78 0 0 1 96 18"/>'
+            '<path class="arc" d="M30 96 A66 66 0 0 1 96 30"/>'
+            '<path class="arc" d="M42 96 A54 54 0 0 1 96 42"/>'
+            '<line x1="22" y1="60" x2="98" y2="60" stroke-dasharray="1 7"/>'
+            '<line x1="60" y1="22" x2="60" y2="98" stroke-dasharray="1 7"/></svg>')
+
 def esc(s):
     return html.escape(str(s if s is not None else ""), quote=True)
 
@@ -94,7 +119,7 @@ def render_card(e, idx):
         f'<article class="card conf-{esc(conf)}" data-cat="{esc(key)}" data-first="{1 if first else 0}" '
         f'data-year="{ys}" data-search="{esc(blob)}" id="e{idx}">'
         f'<header class="card-h"><time class="yr"{dt_attr}>{esc(e.get("year_display",""))}</time>'
-        f'<span class="chip" style="--c:{color}">{esc(label)}</span>{first_html}</header>'
+        f'<span class="chip" style="--c:{color}">{icon(key, "chip-ic")}{esc(label)}</span>{first_html}</header>'
         f'<h2 class="nm">{esc(e.get("name_ja",""))}</h2>'
         f'<p class="og">{esc(e.get("name_original",""))}</p>'
         f'<p class="au">{esc(e.get("author",""))}</p>'
@@ -115,7 +140,7 @@ def render_chips(entries):
             label, color = CAT[k]
             chips.append(
                 f'<button class="chip-f" type="button" data-cat="{k}" aria-pressed="false">'
-                f'<span class="dot" style="--c:{color}"></span>{esc(label)} <span class="n">{counts[k]}</span></button>'
+                f'<span class="ci" style="color:{color}">{icon(k)}</span>{esc(label)} <span class="n">{counts[k]}</span></button>'
             )
     return "\n".join(chips)
 
@@ -155,6 +180,64 @@ def render_jsonld(entries, base):
         ],
     }
     return json.dumps(graph, ensure_ascii=False)
+
+HEADPHONE = ('<svg class="pod-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+             'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/>'
+             '<rect x="3" y="13.5" width="4.2" height="6.5" rx="1.3"/>'
+             '<rect x="16.8" y="13.5" width="4.2" height="6.5" rx="1.3"/></svg>')
+
+def render_pod(ep):
+    if not ep:
+        return ""
+    turns = ep.get("turns", [])
+    tr = "".join(
+        f'<p class="ln"><span class="sp sp-{"navi" if t["speaker"]=="ナビ" else "sensei"}">'
+        f'{esc(t["speaker"])}</span>{esc(t["text"])}</p>' for t in turns)
+    mins = round(ep.get("duration_s", 0) / 60)
+    return (
+        '<section class="pod" id="podcast"><div class="wrap pod-in">'
+        f'<div class="pod-head">{HEADPHONE}<div class="pod-h-t">'
+        '<p class="pod-eyebrow">聴いて楽しむ ・ ポッドキャスト 第1回</p>'
+        f'<h2 class="pod-title">{esc(ep.get("title",""))}</h2></div></div>'
+        f'<p class="pod-sum">{esc(ep.get("summary",""))}</p>'
+        '<audio class="pod-audio" controls preload="none" src="audio/ep1.mp3">'
+        'お使いのブラウザは音声再生に対応していません。<a href="audio/ep1.mp3">MP3を開く</a>。</audio>'
+        f'<p class="pod-links"><a href="audio/ep1.mp3" download>⬇ MP3をダウンロード（約{mins}分）</a>'
+        '<a href="feed.xml">🎧 Podcastアプリで購読（RSS）</a></p>'
+        '<details class="pod-tr"><summary>台本を読む（全文）</summary>'
+        f'<div class="tr">{tr}</div></details>'
+        '</div></section>')
+
+def render_rss(ep, base):
+    import email.utils
+    pub = email.utils.format_datetime(datetime.datetime.now().astimezone())
+    dur = int(ep.get("duration_s", 0))
+    hms = f"{dur//3600:02d}:{(dur%3600)//60:02d}:{dur%60:02d}"
+    cover = f"{base}/audio/cover.png"
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" '
+        'xmlns:content="http://purl.org/rss/1.0/modules/content/">\n<channel>\n'
+        '<title>からだを、つくり直す ― 形成外科2600年の物語</title>\n'
+        f'<link>{base}/</link>\n<language>ja</language>\n'
+        '<description>形成外科の術式・原著と「世界初」を、二人のかけあいでたどる歴史ポッドキャスト。データベース「術式の系譜」より。</description>\n'
+        '<itunes:author>術式の系譜</itunes:author>\n'
+        '<itunes:summary>形成外科2600年の里程標を、物語で。</itunes:summary>\n'
+        '<itunes:owner><itunes:name>術式の系譜</itunes:name></itunes:owner>\n'
+        '<itunes:category text="Science"><itunes:category text="Medicine"/></itunes:category>\n'
+        '<itunes:explicit>false</itunes:explicit>\n<itunes:type>episodic</itunes:type>\n'
+        f'<itunes:image href="{cover}"/>\n'
+        f'<image><url>{cover}</url><title>からだを、つくり直す</title><link>{base}/</link></image>\n'
+        '<item>\n'
+        f'<title>{esc(ep.get("title",""))}</title>\n'
+        f'<description>{esc(ep.get("summary",""))}</description>\n'
+        f'<pubDate>{pub}</pubDate>\n'
+        f'<enclosure url="{base}/audio/ep1.mp3" length="{ep.get("bytes",0)}" type="audio/mpeg"/>\n'
+        '<guid isPermaLink="false">keisei-atlas-ep1</guid>\n'
+        f'<itunes:duration>{hms}</itunes:duration>\n'
+        '<itunes:episode>1</itunes:episode>\n<itunes:explicit>false</itunes:explicit>\n'
+        '</item>\n</channel>\n</rss>\n')
 
 CSS = r"""
 :root{
@@ -246,6 +329,32 @@ footer b{color:var(--ink)}
   .grid{grid-template-columns:1fr}
   .tl-row{grid-template-columns:70px 1fr;gap:12px}
 }
+.pod{background:linear-gradient(180deg,var(--surface2),var(--surface));border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.pod-in{padding:26px 22px 30px}
+.pod-head{display:flex;gap:14px;align-items:flex-start}
+.pod-ic{width:30px;height:30px;color:var(--accent);flex:none;margin-top:4px}
+.pod-eyebrow{font-size:12px;letter-spacing:.16em;color:var(--accent);font-weight:700}
+.pod-title{font-family:var(--serif);font-size:clamp(20px,3vw,27px);font-weight:600;line-height:1.22;margin-top:3px;text-wrap:balance}
+.pod-sum{color:var(--muted);font-size:14.5px;margin-top:10px;max-width:72ch}
+.pod-audio{width:100%;max-width:640px;margin-top:16px;display:block}
+.pod-links{display:flex;flex-wrap:wrap;gap:9px 20px;margin-top:13px;font-size:13.5px;font-weight:600}
+.pod-links a{text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px}
+.pod-tr{margin-top:16px;max-width:80ch}
+.pod-tr summary{font-size:13px;color:var(--accent);cursor:pointer;font-weight:600}
+.pod-tr .tr{margin-top:12px;border-left:2px solid var(--rule);padding-left:14px;max-height:440px;overflow:auto}
+.pod-tr .ln{font-size:14px;margin:9px 0;line-height:1.72}
+.pod-tr .sp{font-weight:700;margin-right:8px;font-size:11.5px;padding:1px 7px;border-radius:4px;white-space:nowrap;color:#fff}
+.pod-tr .sp-navi{background:var(--accent)}
+.pod-tr .sp-sensei{background:#3D5A80}
+.ic{width:1em;height:1em;display:inline-block;vertical-align:-.12em;flex:none}
+.chip{display:inline-flex;align-items:center;gap:5px}
+.chip .ic{width:13px;height:13px}
+.chip-f .ci{display:inline-flex;width:15px;height:15px;align-items:center}
+.chip-f .ci .ic{width:15px;height:15px}
+.mast-in{position:relative}
+.hero-emblem{position:absolute;right:2px;top:14px;width:120px;height:120px;color:var(--accent);opacity:.14;pointer-events:none}
+@media (max-width:640px){.hero-emblem{display:none}}
+@media (prefers-reduced-motion:no-preference){.hero-emblem .arc{stroke-dasharray:270;stroke-dashoffset:270;animation:draw 2.2s .25s ease forwards}@keyframes draw{to{stroke-dashoffset:0}}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 """
 
@@ -316,7 +425,7 @@ JS = r"""
 })();
 """
 
-def build_body(entries):
+def build_body(entries, episode=None):
     cards = "\n".join(render_card(e, i) for i, e in enumerate(entries))
     chips = render_chips(entries)
     firsts = sum(1 for e in entries if e.get("is_first"))
@@ -328,9 +437,11 @@ def build_body(entries):
         "q": search_blob(e),
     } for e in entries]
     catcolor = {k: v[1] for k, v in CAT.items()}
+    pod = render_pod(episode)
     search_svg = ('<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round">'
                   '<circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>')
     body = f"""<header class="mast"><div class="wrap mast-in">
+{HERO_SVG}
 <p class="eyebrow">形成外科 原典データベース</p>
 <h1 class="title">術式の系譜<span class="en">Genealogy of Reconstructive Operations</span></h1>
 <p class="thesis">紀元前600年のスシュルタから現代まで ― 形成外科を形づくった術式・皮弁・植皮・マイクロサージャリーの<b>原著論文</b>と、それを<b>世界で初めて行った人</b>を、一次資料へのリンク付きで年代順にたどる。</p>
@@ -346,6 +457,7 @@ def build_body(entries):
 {chips}
 </div>
 </div></header>
+{pod}
 <main class="wrap">
 <div class="grid" id="list">
 {cards}
@@ -366,12 +478,38 @@ def build_body(entries):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base-url", default="https://example.com")
+    ap.add_argument("--google-verify", default="")
     args = ap.parse_args()
     base = args.base_url.rstrip("/")
+    gverify = (f'<meta name="google-site-verification" content="{esc(args.google_verify)}">\n' if args.google_verify else "")
     entries, raw_n = load_entries()
+    episode = None
+    epf = ROOT / "data" / "podcast_ep1.json"
+    mf = ROOT / "data" / "ep1_meta.json"
+    if epf.exists():
+        episode = json.loads(epf.read_text(encoding="utf-8"))
+        if mf.exists():
+            episode.update(json.loads(mf.read_text(encoding="utf-8")))
     DIST.mkdir(exist_ok=True)
-    body = build_body(entries)
+    body = build_body(entries, episode)
     jsonld = render_jsonld(entries, base)
+    _cover_png = ROOT / "docs" / "audio" / "cover.png"
+    og_image = f"{base}/audio/cover.png" if (episode and _cover_png.exists()) else f"{base}/og.svg"
+    rss_link = (f'<link rel="alternate" type="application/rss+xml" title="ポッドキャスト" href="{base}/feed.xml">\n'
+                if episode else "")
+    podld = ""
+    if episode:
+        _mins = round(episode.get("duration_s", 0) / 60)
+        _pod = {"@context": "https://schema.org", "@type": "PodcastEpisode",
+                "name": episode.get("title", ""), "episodeNumber": 1, "inLanguage": "ja",
+                "timeRequired": f"PT{_mins}M", "abstract": episode.get("summary", ""),
+                "url": f"{base}/#podcast",
+                "associatedMedia": {"@type": "MediaObject", "contentUrl": f"{base}/audio/ep1.mp3",
+                                     "encodingFormat": "audio/mpeg"},
+                "partOfSeries": {"@type": "PodcastSeries", "name": "からだを、つくり直す ― 形成外科2600年の物語",
+                                 "url": f"{base}/", "webFeed": f"{base}/feed.xml"}}
+        podld = f'<script type="application/ld+json">{json.dumps(_pod, ensure_ascii=False)}</script>\n'
+        (DIST / "feed.xml").write_text(render_rss(episode, base), encoding="utf-8")
     title = "術式の系譜 — 形成外科 原典データベース｜Genealogy of Operations"
     desc = ("スシュルタ（前600年）から現代まで、形成外科の術式・皮弁・植皮・マイクロサージャリーの原著論文と"
             "「世界で初めて行った人」を、一次資料の出典リンク付きで年代順にまとめた検索データベース。"
@@ -388,22 +526,22 @@ def main():
 <meta name="keywords" content="形成外科,再建外科,皮弁,植皮,マイクロサージャリー,原著論文,術式,医学史,DIEP,穿通枝皮弁,鼻形成,口唇裂">
 <link rel="canonical" href="{base}/">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<meta property="og:type" content="website">
+{gverify}<meta property="og:type" content="website">
 <meta property="og:site_name" content="術式の系譜">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{base}/">
-<meta property="og:image" content="{base}/og.svg">
+<meta property="og:image" content="{og_image}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(desc)}">
-<meta name="twitter:image" content="{base}/og.svg">
+<meta name="twitter:image" content="{og_image}">
 <meta name="theme-color" content="#EFEBE2">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237E2B26'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23EFEBE2' font-family='Georgia,serif'%3E系%3C/text%3E%3C/svg%3E">
 <style>.sr-only{{position:absolute;left:-9999px}}{CSS}</style>
 <script type="application/ld+json">{jsonld}</script>
-</head>
+{rss_link}{podld}</head>
 <body>
 {body}
 </body>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400">
+<rect width="1400" height="1400" fill="#EFEBE2"/>
+<rect x="0" y="0" width="1400" height="20" fill="#7E2B26"/>
+<g fill="none" stroke="#7E2B26" stroke-width="7" opacity="0.15" stroke-linecap="round">
+  <path d="M240 1180 A900 900 0 0 1 1140 280"/>
+  <path d="M380 1180 A760 760 0 0 1 1140 420"/>
+  <path d="M520 1180 A620 620 0 0 1 1140 560"/>
+  <line x1="300" y1="720" x2="1160" y2="720" stroke-dasharray="2 26"/>
+</g>
+<text x="120" y="330" font-family="Georgia, serif" font-size="40" fill="#7E2B26" letter-spacing="10">形成外科 2600年の物語 ・ PODCAST</text>
+<text x="118" y="630" font-family="'Hiragino Mincho ProN','YuMincho', serif" font-size="205" font-weight="700" fill="#22201C">からだを、</text>
+<text x="118" y="850" font-family="'Hiragino Mincho ProN','YuMincho', serif" font-size="205" font-weight="700" fill="#22201C">つくり直す</text>
+<text x="122" y="990" font-family="Georgia, serif" font-size="38" fill="#6E655A" letter-spacing="7">GENEALOGY OF RECONSTRUCTIVE OPERATIONS</text>
+<text x="122" y="1250" font-family="'Hiragino Mincho ProN', serif" font-size="46" fill="#22201C">スシュルタから顔面移植まで ― 「世界初」を成した人々の物語</text>
+</svg>
