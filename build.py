@@ -89,7 +89,40 @@ def search_blob(e):
     parts = [e.get("name_ja",""), e.get("name_original",""), e.get("author",""),
              e.get("journal",""), e.get("paper_title",""), e.get("significance_ja",""),
              CAT.get(e.get("category_key",""), ("",""))[0]]
+    for p in e.get("papers", []) or []:
+        parts += [p.get("author",""), p.get("title",""), p.get("journal","")]
     return re.sub(r"\s+", " ", " ".join(parts)).lower()
+
+def render_sources(e):
+    """単一urlの従来項目 → 1リンク。papers[]付き項目 → 複数論文リスト（原著/PDF/日本語解説リンク）。"""
+    papers = e.get("papers")
+    if not papers:
+        return (f'<a class="src" href="{esc(e.get("url",""))}" target="_blank" rel="noopener noreferrer">'
+                f'原著・出典を見る<span aria-hidden="true"> ↗</span></a>')
+    rows = []
+    for p in papers:
+        links = [f'<a href="{esc(p.get("url",""))}" target="_blank" rel="noopener noreferrer">'
+                 f'{esc(p.get("link_label","原著・抄録"))}<span aria-hidden="true"> ↗</span></a>']
+        if p.get("pdf"):
+            links.append(f'<a class="pdf" href="{esc(p["pdf"])}" target="_blank" rel="noopener noreferrer">'
+                         f'PDF<span aria-hidden="true"> ↓</span></a>')
+        if p.get("commentary"):
+            links.append(f'<a class="jp" href="{esc(p["commentary"])}">'
+                         f'日本語解説<span aria-hidden="true"> →</span></a>')
+        kind = p.get("kind", "")
+        kind_html = f'<span class="p-kind">{esc(kind)}</span>' if kind else ""
+        rows.append(
+            '<li class="paper">'
+            f'<span class="p-yr">{esc(p.get("year",""))}</span>'
+            '<span class="p-body">'
+            f'<span class="p-head">{kind_html}<span class="p-au">{esc(p.get("author",""))}</span></span>'
+            f'<cite class="p-ti">{esc(p.get("title",""))}</cite>'
+            f'<span class="p-jr">{esc(p.get("journal",""))}</span>'
+            f'<span class="p-links">{" ".join(links)}</span>'
+            '</span></li>'
+        )
+    return ('<div class="papers"><p class="papers-h">原著・関連論文</p>'
+            f'<ol class="paper-list">{"".join(rows)}</ol></div>')
 
 def cat_label_color(e):
     return CAT.get(e.get("category_key", "extra"), ("基礎・その他", "#5F6B63"))
@@ -115,6 +148,12 @@ def render_card(e, idx):
     elif conf == "low":
         conf_html = '<p class="conf-tag conf-low-tag">※ 出典は要確認</p>'
     first_html = '<span class="first" title="世界で初めて行われた（とされる）里程標">初</span>' if first else ""
+    has_papers = bool(e.get("papers"))
+    meta_html = "" if has_papers else (
+        f'<p class="au">{esc(e.get("author",""))}</p>'
+        f'<p class="pp"><cite>{esc(e.get("paper_title",""))}</cite></p>'
+        f'<p class="jr">{esc(e.get("journal",""))}</p>'
+    )
     return (
         f'<article class="card conf-{esc(conf)}" data-cat="{esc(key)}" data-first="{1 if first else 0}" '
         f'data-year="{ys}" data-search="{esc(blob)}" id="e{idx}">'
@@ -122,12 +161,10 @@ def render_card(e, idx):
         f'<span class="chip" style="--c:{color}">{icon(key, "chip-ic")}{esc(label)}</span>{first_html}</header>'
         f'<h2 class="nm">{esc(e.get("name_ja",""))}</h2>'
         f'<p class="og">{esc(e.get("name_original",""))}</p>'
-        f'<p class="au">{esc(e.get("author",""))}</p>'
-        f'<p class="pp"><cite>{esc(e.get("paper_title",""))}</cite></p>'
-        f'<p class="jr">{esc(e.get("journal",""))}</p>'
+        f'{meta_html}'
         f'<p class="sig">{esc(e.get("significance_ja",""))}</p>'
         f'{conf_html}{note_html}'
-        f'<a class="src" href="{esc(e.get("url",""))}" target="_blank" rel="noopener noreferrer">原著・出典を見る<span aria-hidden="true"> ↗</span></a>'
+        f'{render_sources(e)}'
         f'</article>'
     )
 
@@ -305,6 +342,50 @@ main{padding:26px 0 40px;min-height:50vh}
 .note p{font-size:13px;color:var(--muted);margin-top:6px;padding:2px 0 2px 11px;border-left:2px solid var(--rule)}
 .src{margin-top:13px;font-size:13px;font-weight:600;align-self:flex-start;text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px}
 .src:hover{color:var(--accent-deep);border-color:var(--accent-deep)}
+.papers{margin-top:13px}
+.papers-h{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-bottom:8px}
+.paper-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.paper{display:grid;grid-template-columns:46px 1fr;gap:10px;padding-top:10px;border-top:1px dotted var(--rule)}
+.paper:first-child{border-top:0;padding-top:0}
+.p-yr{font-family:var(--mono);font-size:14px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;padding-top:1px}
+.p-body{display:flex;flex-direction:column;gap:3px;min-width:0}
+.p-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.p-kind{font-size:10px;font-weight:700;letter-spacing:.03em;color:var(--muted);background:var(--surface2);border:1px solid var(--rule);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.p-au{font-size:12.5px;color:var(--ink);font-weight:600}
+.p-ti{font-size:13.5px;font-style:italic;color:var(--ink);line-height:1.4}
+.p-jr{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.5}
+.p-links{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:4px;font-size:12.5px;font-weight:600}
+.p-links a{text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px;color:var(--accent)}
+.p-links a.pdf{color:#3D5A80;border-color:#3D5A80}
+.p-links a.pdf:hover{color:#26374d;border-color:#26374d}
+.p-links a.jp{color:#4E7A6A;border-color:#4E7A6A}
+.p-links a.jp:hover{color:#3a5c50;border-color:#3a5c50}
+/* 論文解説ページ */
+.paper-page{max-width:760px;padding-top:26px;padding-bottom:56px}
+.paper-page .cite-box{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:10px;padding:15px 17px;margin-bottom:22px}
+.paper-page .cite-box .c-au{font-weight:600;font-size:14px}
+.paper-page .cite-box .c-ti{font-style:italic;font-size:15px;margin-top:3px;display:block}
+.paper-page .cite-box .c-jr{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+.paper-page .cite-box .c-links{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:11px;font-size:13px;font-weight:600}
+.paper-page .cite-box .c-links a{text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px}
+.paper-page .cite-box .c-links a.pdf{color:#3D5A80;border-color:#3D5A80}
+.paper-page .lead{font-size:16.5px;line-height:1.85;color:var(--ink);margin-bottom:10px;font-weight:500}
+.paper-page section{margin-top:26px}
+.paper-page section h2{font-family:var(--serif);font-size:21px;font-weight:600;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+.paper-page section p{margin:10px 0;font-size:15px;line-height:1.9}
+.paper-page .takeaways{margin-top:28px;background:var(--surface2);border-radius:12px;padding:18px 20px}
+.paper-page .takeaways h2{font-family:var(--serif);font-size:18px;font-weight:600;margin-bottom:10px;border:0;padding:0}
+.paper-page .takeaways ul{margin:0;padding-left:20px}
+.paper-page .takeaways li{margin:7px 0;font-size:14.5px;line-height:1.7}
+.paper-page .glossary{margin-top:26px}
+.paper-page .glossary h2{font-family:var(--serif);font-size:18px;font-weight:600;margin-bottom:10px}
+.paper-page .glossary dl{margin:0}
+.paper-page .glossary dt{font-weight:700;font-size:14px;color:var(--accent-deep);margin-top:12px}
+.paper-page .glossary dd{margin:3px 0 0;font-size:14px;color:var(--muted);line-height:1.7}
+.paper-page .disclaimer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--faint);line-height:1.7}
+.paper-page .backlink{display:inline-block;margin-top:18px;font-size:14px;font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px}
+.crumb{font-size:13px;color:var(--muted);margin-bottom:6px}
+.crumb a{font-weight:600;text-decoration:none}
 .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:64px 0;font-size:15px}
 
 .tl{display:none}
@@ -475,6 +556,79 @@ def build_body(entries, episode=None):
 <script>{JS}</script>"""
     return body
 
+def render_commentary_page(d, base):
+    """英語原著の日本語解説ページ（教育目的のオリジナル解説。逐語訳ではない）。"""
+    pp = d.get("paper", {})
+    c_links = [f'<a href="{esc(pp.get("url",""))}" target="_blank" rel="noopener noreferrer">原著（PubMed）<span aria-hidden="true"> ↗</span></a>']
+    if pp.get("pdf"):
+        c_links.append(f'<a class="pdf" href="{esc(pp["pdf"])}" target="_blank" rel="noopener noreferrer">無料PDF<span aria-hidden="true"> ↓</span></a>')
+    secs = ""
+    for s in d.get("sections", []):
+        ps = "".join(f"<p>{esc(x)}</p>" for x in s.get("p", []))
+        secs += f'<section><h2>{esc(s.get("h",""))}</h2>{ps}</section>'
+    takeaways = ""
+    if d.get("takeaways"):
+        lis = "".join(f"<li>{esc(x)}</li>" for x in d["takeaways"])
+        takeaways = f'<div class="takeaways"><h2>この論文の要点</h2><ul>{lis}</ul></div>'
+    glossary = ""
+    if d.get("glossary"):
+        items = "".join(f"<dt>{esc(g.get('term',''))}</dt><dd>{esc(g.get('def',''))}</dd>" for g in d["glossary"])
+        glossary = f'<div class="glossary"><h2>用語ミニ辞典</h2><dl>{items}</dl></div>'
+    title = f'{d.get("title_ja","")}｜術式の系譜'
+    desc = (d.get("lead","") or "")[:110]
+    body = f"""<header class="mast"><div class="wrap mast-in">
+<p class="crumb"><a href="../">術式の系譜</a> ／ 論文 日本語解説</p>
+<p class="eyebrow">{esc(d.get("flap_ja",""))}</p>
+<h1 class="title" style="font-size:clamp(23px,3.6vw,34px)">{esc(d.get("title_ja",""))}</h1>
+</div></header>
+<main class="wrap paper-page">
+<div class="cite-box">
+<span class="c-au">{esc(pp.get("author",""))}</span>
+<cite class="c-ti">{esc(pp.get("title",""))}</cite>
+<span class="c-jr">{esc(pp.get("journal",""))}</span>
+<span class="c-links">{" ".join(c_links)}</span>
+</div>
+<p class="lead">{esc(d.get("lead",""))}</p>
+{secs}
+{takeaways}
+{glossary}
+<p class="disclaimer">本ページは形成外科の学習・参照を目的とした<b>編集部によるオリジナルの日本語解説</b>で、原著（英語）の逐語訳・全文転載ではありません。正確な内容・数値・図は必ず上記リンク先の原著をご確認ください。</p>
+<a class="backlink" href="../">← 術式の系譜（一覧）に戻る</a>
+</main>"""
+    return f"""<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(title)}</title>
+<meta name="description" content="{esc(desc)}">
+<meta name="author" content="山形孝介">
+<link rel="canonical" href="{base}/papers/{esc(d.get('slug',''))}.html">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:url" content="{base}/papers/{esc(d.get('slug',''))}.html">
+<meta property="og:image" content="{base}/og.svg">
+<meta name="theme-color" content="#EFEBE2">
+<style>.sr-only{{position:absolute;left:-9999px}}{CSS}</style>
+</head><body>
+{body}
+</body></html>"""
+
+def build_commentaries(base):
+    cdir = ROOT / "data" / "commentaries"
+    if not cdir.exists():
+        return []
+    out = DIST / "papers"
+    out.mkdir(parents=True, exist_ok=True)
+    slugs = []
+    for f in sorted(cdir.glob("*.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        slug = d.get("slug") or f.stem
+        (out / f"{slug}.html").write_text(render_commentary_page(d, base), encoding="utf-8")
+        slugs.append(slug)
+    return slugs
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base-url", default="https://example.com")
@@ -576,7 +730,10 @@ def main():
 </svg>"""
     (DIST / "og.svg").write_text(og, encoding="utf-8")
 
+    commentary_slugs = build_commentaries(base)
+
     print(f"built {len(entries)} entries (raw {raw_n}, collapsed {raw_n-len(entries)})")
+    print(f"commentary pages: {len(commentary_slugs)} -> {commentary_slugs}")
     print("dist:", *(p.name for p in sorted(DIST.iterdir())))
     print("index.html bytes:", (DIST/'index.html').stat().st_size)
 
