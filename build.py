@@ -556,6 +556,40 @@ def build_body(entries, episode=None):
 <script>{JS}</script>"""
     return body
 
+FIG_CSS = """
+figure.paper-fig{margin:22px 0;padding:0}
+figure.paper-fig img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid rgba(0,0,0,.14);background:#fff}
+figure.paper-fig figcaption{font-size:14px;line-height:1.7;color:#4a4640;margin-top:8px}
+figure.paper-fig .fig-cap{display:block}
+figure.paper-fig .fig-src{display:block;margin-top:5px;font-size:12.5px;color:#6d675e}
+figure.paper-fig .fig-src a{color:#6d675e}
+figure.paper-fig .fig-note{display:block;margin-top:4px;font-size:12.5px;color:#8a6a3a}
+"""
+
+def render_figures(figs):
+    """CC BY 等・再利用が明示的に許諾された図のみを掲載する。
+    クレジット（著者・誌名・出典リンク・ライセンス）は必須。原著の図は権利上ここに載せない。"""
+    out = ""
+    for f in figs:
+        cr = f.get("credit", {})
+        src_bits = []
+        if cr.get("author"):
+            src_bits.append(esc(cr["author"]))
+        if cr.get("journal"):
+            src_bits.append(esc(cr["journal"]))
+        cite = "／".join(src_bits)
+        link = (f'<a href="{esc(cr["url"])}" target="_blank" rel="noopener noreferrer">出典'
+                f'<span aria-hidden="true"> ↗</span></a>') if cr.get("url") else ""
+        lic = (f'<a href="{esc(cr["license_url"])}" target="_blank" rel="noopener noreferrer">'
+               f'{esc(cr.get("license","CC BY"))}<span aria-hidden="true"> ↗</span></a>') if cr.get("license_url") else esc(cr.get("license",""))
+        note = f'<span class="fig-note">{esc(f["note"])}</span>' if f.get("note") else ""
+        out += (f'<figure class="paper-fig">'
+                f'<img src="{esc(f["src"])}" alt="{esc(f.get("alt",""))}" loading="lazy" decoding="async">'
+                f'<figcaption><span class="fig-cap">{esc(f.get("caption",""))}</span>'
+                f'<span class="fig-src">図の出典：{cite}　{link}　ライセンス：{lic}</span>'
+                f'{note}</figcaption></figure>')
+    return out
+
 def render_commentary_page(d, base):
     """英語原著の日本語解説ページ（教育目的のオリジナル解説。逐語訳ではない）。"""
     pp = d.get("paper", {})
@@ -565,7 +599,7 @@ def render_commentary_page(d, base):
     secs = ""
     for s in d.get("sections", []):
         ps = "".join(f"<p>{esc(x)}</p>" for x in s.get("p", []))
-        secs += f'<section><h2>{esc(s.get("h",""))}</h2>{ps}</section>'
+        secs += f'<section><h2>{esc(s.get("h",""))}</h2>{ps}{render_figures(s.get("figures", []))}</section>'
     takeaways = ""
     if d.get("takeaways"):
         lis = "".join(f"<li>{esc(x)}</li>" for x in d["takeaways"])
@@ -592,7 +626,7 @@ def render_commentary_page(d, base):
 {secs}
 {takeaways}
 {glossary}
-<p class="disclaimer">本ページは形成外科の学習・参照を目的とした<b>編集部によるオリジナルの日本語解説</b>で、原著（英語）の逐語訳・全文転載ではありません。正確な内容・数値・図は必ず上記リンク先の原著をご確認ください。</p>
+<p class="disclaimer">本ページは形成外科の学習・参照を目的とした<b>編集部によるオリジナルの日本語解説</b>で、原著（英語）の逐語訳・全文転載ではありません。正確な内容・数値・図は必ず上記リンク先の原著をご確認ください。<br>掲載している図は、<b>原著の図ではありません</b>。原著の図は出版社が著作権を持ち転載できないため、<b>同じ術式・同じ解剖を扱った無料公開（オープンアクセス／CC BY）論文の図</b>を、出典とライセンスを明記して引用しています。</p>
 <a class="backlink" href="../">← 術式の系譜（一覧）に戻る</a>
 </main>"""
     return f"""<!doctype html>
@@ -610,7 +644,7 @@ def render_commentary_page(d, base):
 <meta property="og:url" content="{base}/papers/{esc(d.get('slug',''))}.html">
 <meta property="og:image" content="{base}/og.svg">
 <meta name="theme-color" content="#EFEBE2">
-<style>.sr-only{{position:absolute;left:-9999px}}{CSS}</style>
+<style>.sr-only{{position:absolute;left:-9999px}}{CSS}{FIG_CSS}</style>
 </head><body>
 {body}
 </body></html>"""
