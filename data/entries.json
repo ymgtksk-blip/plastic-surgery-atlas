@@ -1,6 +1,6 @@
 [
   {
-    "name_ja": "スシュルタ（有茎皮弁・植皮の起源）",
+    "name_ja": "有茎皮弁と植皮の起源（スシュルタ・サンヒター）",
     "name_original": "Sushruta (Suśruta Saṃhitā)",
     "year_display": "c. 600 BCE",
     "year_sort": -600,
@@ -16,7 +16,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "スシュルタの頬部皮弁（インド式鼻形成の起源）",
+    "name_ja": "頬部皮弁 ― インド式鼻形成の起源",
     "name_original": "Sushruta cheek flap (Sushruta Samhita)",
     "year_display": "c. 600 BCE",
     "year_sort": -600,
@@ -32,7 +32,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "スシュルタ・サンヒター（古代インドの鼻形成術）",
+    "name_ja": "古代インドの鼻形成術（スシュルタ・サンヒター）",
     "name_original": "Sushruta Samhita (Sushruta)",
     "year_display": "c. 600 BCE",
     "year_sort": -600,
@@ -48,7 +48,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "タリアコッツィのイタリア法（上腕皮弁による鼻再建）",
+    "name_ja": "イタリア法 ― 上腕皮弁による鼻再建",
     "name_original": "Tagliacozzi Italian method (arm flap rhinoplasty)",
     "year_display": "1597",
     "year_sort": 1597,
@@ -64,7 +64,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "タリアコッツィ『De Curtorum Chirurgia』（近代形成外科の祖）",
+    "name_ja": "『De Curtorum Chirurgia』― 形成外科最初の体系書",
     "name_original": "Gaspare Tagliacozzi, De Curtorum Chirurgia per Insitionem",
     "year_display": "1597",
     "year_sort": 1597,
@@ -80,7 +80,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "バロニオ（動物での自家植皮実験）",
+    "name_ja": "自家植皮の動物実験",
     "name_original": "Giuseppe Baronio, \"Degli innesti animali\"",
     "year_display": "1804",
     "year_sort": 1804,
@@ -96,7 +96,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "カルピューによるインド式前額皮弁の西洋への紹介",
+    "name_ja": "インド式前額皮弁の西洋への紹介",
     "name_original": "Carpue's operation (Indian forehead flap)",
     "year_display": "1816",
     "year_sort": 1816,
@@ -112,7 +112,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "ビュンガー（ヒト遊離全層植皮の初成功）",
+    "name_ja": "ヒト遊離全層植皮の初成功",
     "name_original": "Christian Heinrich Bünger",
     "year_display": "1823",
     "year_sort": 1823,
@@ -144,7 +144,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "モートンによるエーテル麻酔の公開実証",
+    "name_ja": "エーテル麻酔の公開実証",
     "name_original": "William T. G. Morton / Ether Day (Henry J. Bigelow report)",
     "year_display": "1846",
     "year_sort": 1846,
@@ -160,7 +160,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "カール・ランガー（皮膚割線＝ランガー線）",
+    "name_ja": "皮膚割線（ランガー線）",
     "name_original": "Karl Langer (Langer's cleavage lines)",
     "year_display": "1861",
     "year_sort": 1861,
@@ -176,7 +176,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "フォン・ランゲンベックの口蓋形成術",
+    "name_ja": "口蓋形成術（ランゲンベック法）",
     "name_original": "Bernhard von Langenbeck uranoplasty (mucoperiosteal flap palatoplasty)",
     "year_display": "1861",
     "year_sort": 1861,
@@ -192,7 +192,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "リスターの消毒法（防腐手術の原理）",
+    "name_ja": "消毒法 ― 防腐手術の原理",
     "name_original": "Joseph Lister, On the Antiseptic Principle in the Practice of Surgery",
     "year_display": "1867",
     "year_sort": 1867,
@@ -208,7 +208,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "ルヴェルダン（ピンチグラフト）",
+    "name_ja": "ピンチグラフト（点状植皮）",
     "name_original": "Jaques-Louis Reverdin, \"Greffe épidermique\"",
     "year_display": "1869",
     "year_sort": 1869,
@@ -224,7 +224,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "レヴェルダンの遊離皮膚移植（近代植皮術の起点）",
+    "name_ja": "遊離皮膚移植 ― 近代植皮術の起点",
     "name_original": "Jacques-Louis Reverdin, epidermic (pinch) skin graft",
     "year_display": "1869",
     "year_sort": 1869,
@@ -240,7 +240,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "オリエ（分層植皮＝真皮表皮グラフト）",
+    "name_ja": "分層植皮（真皮表皮グラフト）",
     "name_original": "Louis Léopold Ollier (dermo-epidermic graft)",
     "year_display": "1872",
     "year_sort": 1872,
@@ -256,7 +256,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "ウルフ（全層植皮の初報）",
+    "name_ja": "全層植皮の初報",
     "name_original": "John Reissberg Wolfe (Wolfe graft)",
     "year_display": "1875",
     "year_sort": 1875,
@@ -272,7 +272,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "ティールシュ（薄い分層植皮＝Thierschグラフト）",
+    "name_ja": "薄い分層植皮（ティールシュ植皮）",
     "name_original": "Carl Thiersch (Thiersch graft)",
     "year_display": "1874/1886",
     "year_sort": 1886,
@@ -288,7 +288,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "カール・マンショ（人体皮膚動脈の解剖）",
+    "name_ja": "人体皮膚動脈の解剖",
     "name_original": "Carl Manchot, Die Hautarterien des menschlichen Körpers",
     "year_display": "1889",
     "year_sort": 1889,
@@ -304,7 +304,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "クラウゼ（全層植皮の確立＝Wolfe-Krause）",
+    "name_ja": "全層植皮の確立（Wolfe-Krause植皮）",
     "name_original": "Fedor Krause (Wolfe-Krause graft)",
     "year_display": "1893",
     "year_sort": 1893,
@@ -336,7 +336,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "ジャック・ジョゼフ（縮小鼻形成術）",
+    "name_ja": "縮小鼻形成術",
     "name_original": "Jacques Joseph, reduction rhinoplasty",
     "year_display": "1898",
     "year_sort": 1898,
@@ -352,7 +352,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "ロバート・アッベ（交叉口唇弁＝アッベ弁）",
+    "name_ja": "交叉口唇弁（アッベ弁）",
     "name_original": "Robert Abbe, lip switch (cross-lip) flap",
     "year_display": "1898",
     "year_sort": 1898,
@@ -368,7 +368,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "ル・フォール骨折分類",
+    "name_ja": "顔面中央部骨折の分類（ル・フォール分類）",
     "name_original": "Le Fort classification of maxillary fractures",
     "year_display": "1901",
     "year_sort": 1901,
@@ -384,7 +384,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "カレル & ガスリー（血管吻合の父）",
+    "name_ja": "血管吻合法の確立",
     "name_original": "Alexis Carrel & Charles Claude Guthrie",
     "year_display": "1906",
     "year_sort": 1906,
@@ -400,7 +400,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "フィラトフ／ジリーズの有茎管状皮弁（チューブ皮弁）",
+    "name_ja": "有茎管状皮弁（チューブ皮弁）",
     "name_original": "Tubed pedicle flap (Filatov / Gillies)",
     "year_display": "1917",
     "year_sort": 1917,
@@ -416,7 +416,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "ジリーズ『Plastic Surgery of the Face』（近代形成外科の父）",
+    "name_ja": "『Plastic Surgery of the Face』― 近代形成外科の礎",
     "name_original": "Harold Gillies, Plastic Surgery of the Face",
     "year_display": "1920",
     "year_sort": 1920,
@@ -432,7 +432,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "パジェット & フッド（ダーマトーム）",
+    "name_ja": "ダーマトーム（植皮採取器）",
     "name_original": "Earl C. Padgett & George J. Hood (Padgett-Hood dermatome)",
     "year_display": "1939",
     "year_sort": 1939,
@@ -448,7 +448,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "マッキンドーとギニアピッグ・クラブ（熱傷再建）",
+    "name_ja": "熱傷再建とギニアピッグ・クラブ",
     "name_original": "Archibald McIndoe / The Guinea Pig Club (Queen Victoria Hospital, East Grinstead)",
     "year_display": "1941",
     "year_sort": 1941,
@@ -464,7 +464,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "フレデリック・モース（ケモサージェリー／Mohs手術）",
+    "name_ja": "Mohs手術（ケモサージェリー）",
     "name_original": "Frederic E. Mohs, chemosurgery (Mohs micrographic surgery)",
     "year_display": "1941",
     "year_sort": 1941,
@@ -480,7 +480,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "ギブソン & メダワー（移植免疫の実験的基礎）",
+    "name_ja": "移植免疫の実験的基礎",
     "name_original": "Thomas Gibson & Peter B. Medawar",
     "year_display": "1943/1944",
     "year_sort": 1944,
@@ -496,7 +496,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "リンベルグの菱形皮弁（ロンボイド皮弁）",
+    "name_ja": "菱形皮弁（ロンボイド皮弁／リンベルグ皮弁）",
     "name_original": "Limberg rhombic flap",
     "year_display": "1946",
     "year_sort": 1946,
@@ -528,7 +528,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "テニソン=ランドール三角弁法（口唇裂）",
+    "name_ja": "三角弁法（口唇裂・テニソン=ランドール法）",
     "name_original": "Tennison-Randall triangular flap repair",
     "year_display": "1952/1959",
     "year_sort": 1952,
@@ -544,7 +544,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "ビリンガム・ブレント・メダワー（獲得免疫寛容）",
+    "name_ja": "獲得免疫寛容の発見",
     "name_original": "Billingham, Brent & Medawar, \"'Actively acquired tolerance' of foreign cells\"",
     "year_display": "1953",
     "year_sort": 1953,
@@ -560,7 +560,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "マレーによる世界初の腎移植成功（ノーベル賞）",
+    "name_ja": "世界初の腎移植成功",
     "name_original": "Joseph E. Murray, first successful human kidney transplant",
     "year_display": "1954",
     "year_sort": 1954,
@@ -576,7 +576,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "ノイマンの組織拡張法",
+    "name_ja": "組織拡張法（ティッシュエキスパンション）",
     "name_original": "Neumann tissue expansion (subcutaneous balloon)",
     "year_display": "1957",
     "year_sort": 1957,
@@ -592,7 +592,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "ミラードの回転前進法（口唇裂）",
+    "name_ja": "回転前進法（口唇裂・ミラード法）",
     "name_original": "Millard rotation-advancement cleft lip repair",
     "year_display": "1957",
     "year_sort": 1957,
@@ -608,7 +608,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "ミラードの回転前進法（片側口唇裂形成）",
+    "name_ja": "回転前進法（片側口唇裂・ミラード法）",
     "name_original": "D. Ralph Millard, rotation-advancement cleft lip repair",
     "year_display": "1957",
     "year_sort": 1957,
@@ -624,7 +624,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "ザイデンベルグ（世界初のヒト遊離組織移植）",
+    "name_ja": "世界初のヒト遊離組織移植",
     "name_original": "Bernard Seidenberg",
     "year_display": "1959",
     "year_sort": 1959,
@@ -640,7 +640,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "タンザーの耳介全再建",
+    "name_ja": "耳介全再建（タンザー法）",
     "name_original": "Tanzer total auricular reconstruction (autogenous costal cartilage)",
     "year_display": "1959",
     "year_sort": 1959,
@@ -656,7 +656,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "ジェイコブソン & スアレス（微小血管吻合の誕生）",
+    "name_ja": "微小血管吻合の誕生",
     "name_original": "Julius H. Jacobson & Ernesto L. Suarez",
     "year_display": "1960",
     "year_sort": 1960,
@@ -672,7 +672,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "ジェイコブソンの顕微鏡下微小血管吻合",
+    "name_ja": "顕微鏡下の微小血管吻合",
     "name_original": "Julius Jacobson & Ernesto Suarez, microvascular anastomosis under the operating microscope",
     "year_display": "1960",
     "year_sort": 1960,
@@ -688,7 +688,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "ジョージ・ウィンター（湿潤創傷治癒の実証）",
+    "name_ja": "湿潤創傷治癒の実証",
     "name_original": "George D. Winter, moist wound healing",
     "year_display": "1962",
     "year_sort": 1962,
@@ -704,7 +704,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "陳中偉（世界初の切断肢再接着）",
+    "name_ja": "世界初の切断肢再接着",
     "name_original": "Chen Zhongwei (陈中伟)",
     "year_display": "1963",
     "year_sort": 1963,
@@ -720,7 +720,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "クローニン=ゲロウのシリコン乳房インプラント",
+    "name_ja": "シリコン乳房インプラント",
     "name_original": "Cronin-Gerow silicone gel breast implant",
     "year_display": "1963",
     "year_sort": 1963,
@@ -736,7 +736,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "タナー & ヴァンデプット（メッシュ植皮）",
+    "name_ja": "メッシュ植皮",
     "name_original": "Tanner, Vandeput & Olley (mesh skin graft)",
     "year_display": "1964",
     "year_sort": 1964,
@@ -752,7 +752,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "モルト & マッケン（欧米初の上肢再接着）",
+    "name_ja": "欧米初の上肢再接着",
     "name_original": "Ronald A. Malt & Charles F. McKhann",
     "year_display": "1962/1964",
     "year_sort": 1964,
@@ -784,7 +784,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "バンク & シュルツ（実験的微小血管再接着）",
+    "name_ja": "実験的微小血管再接着",
     "name_original": "Harry J. Buncke & W. P. Schulz",
     "year_display": "1966",
     "year_sort": 1966,
@@ -800,7 +800,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "バンキーの実験的遊離皮弁移植（マイクロサージャリーの父）",
+    "name_ja": "実験的遊離皮弁移植 ― マイクロサージャリーの礎",
     "name_original": "Harry J. Buncke, experimental microvascular free tissue transfer (hallux-to-hand in rhesus monkey)",
     "year_display": "1966",
     "year_sort": 1966,
@@ -816,7 +816,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "テシエの頭蓋顔面外科創始",
+    "name_ja": "頭蓋顔面外科の創始",
     "name_original": "Tessier craniofacial surgery",
     "year_display": "1967",
     "year_sort": 1967,
@@ -832,7 +832,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "テシエの頭蓋顔面外科（craniofacial surgery の創始）",
+    "name_ja": "頭蓋顔面外科（craniofacial surgery）の創始",
     "name_original": "Paul Tessier, craniofacial surgery / orbital hypertelorism correction",
     "year_display": "1967",
     "year_sort": 1967,
@@ -848,7 +848,7 @@
     "category_key": "history"
   },
   {
-    "name_ja": "小松 & 玉井（世界初の切断母指再接着）",
+    "name_ja": "世界初の切断母指再接着",
     "name_original": "Shigeo Komatsu & Susumu Tamai",
     "year_display": "1968",
     "year_sort": 1968,
@@ -864,7 +864,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "コベット（世界初の足趾-母指移植）",
+    "name_ja": "世界初の足趾–母指移植",
     "name_original": "John R. Cobbett (toe-to-thumb transfer)",
     "year_display": "1969",
     "year_sort": 1969,
@@ -880,7 +880,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "マクレガー＆ジャクソンの鼠径皮弁（軸走型皮弁）",
+    "name_ja": "鼠径皮弁 ― 軸走型皮弁の確立",
     "name_original": "McGregor & Jackson groin flap",
     "year_display": "1972",
     "year_sort": 1972,
@@ -893,7 +893,19 @@
     "is_first": false,
     "confidence": "high",
     "category": "局所皮弁・皮弁の原理",
-    "category_key": "local_flap"
+    "category_key": "local_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1972",
+        "author": "McGregor IA, Jackson IT",
+        "title": "The groin flap",
+        "journal": "Br J Plast Surg. 1972;25(1):3–16",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/4550433/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/mcgregor-jackson-1972.html"
+      }
+    ]
   },
   {
     "name_ja": "鼠径皮弁（グロインフラップ／McGregor皮弁）",
@@ -909,7 +921,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1972",
+        "author": "McGregor IA, Jackson IT",
+        "title": "The groin flap",
+        "journal": "Br J Plast Surg. 1972;25(1):3–16",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/4550433/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/mcgregor-jackson-1972.html"
+      }
+    ]
   },
   {
     "name_ja": "薄筋皮弁（グラシリス皮弁）",
@@ -928,7 +952,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "マクリーン & バンク（世界初の遊離大網移植）",
+    "name_ja": "世界初の遊離大網移植",
     "name_original": "Donald H. McLean & Harry J. Buncke",
     "year_display": "1972",
     "year_sort": 1972,
@@ -944,7 +968,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "マクレガー＆モーガンの軸走型 vs ランダム型皮弁の概念",
+    "name_ja": "軸走型皮弁とランダム型皮弁の概念",
     "name_original": "Axial vs random pattern flaps (McGregor & Morgan)",
     "year_display": "1973",
     "year_sort": 1973,
@@ -976,7 +1000,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "ダニエル & テイラー（世界初の遊離皮弁移植）",
+    "name_ja": "世界初の遊離皮弁移植",
     "name_original": "Rollin K. Daniel & G. Ian Taylor",
     "year_display": "1973",
     "year_sort": 1973,
@@ -992,7 +1016,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "波利井（遊離皮弁の臨床シリーズ確立）",
+    "name_ja": "遊離皮弁の臨床シリーズ確立",
     "name_original": "Kiyonori Harii",
     "year_display": "1974",
     "year_sort": 1974,
@@ -1008,7 +1032,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "ラインワルド & グリーン（培養表皮）",
+    "name_ja": "培養表皮",
     "name_original": "Rheinwald & Green (serial cultivation of keratinocytes)",
     "year_display": "1975",
     "year_sort": 1975,
@@ -1072,7 +1096,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "オコナー ら（培養表皮自家移植の初臨床）",
+    "name_ja": "培養表皮自家移植の初臨床",
     "name_original": "O'Connor, Mulliken, Banks-Schlegel, Kehinde & Green",
     "year_display": "1981",
     "year_sort": 1981,
@@ -1088,7 +1112,7 @@
     "category_key": "skin_graft"
   },
   {
-    "name_ja": "ポンテンの筋膜皮弁（fasciocutaneous flap）",
+    "name_ja": "筋膜皮弁（fasciocutaneous flap）",
     "name_original": "Ponten fasciocutaneous flap ('super flap')",
     "year_display": "1981",
     "year_sort": 1981,
@@ -1120,7 +1144,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "バーク＆ヤナス（人工皮膚＝Integra真皮再生テンプレート）",
+    "name_ja": "人工皮膚（Integra真皮再生テンプレート）",
     "name_original": "John F. Burke & Ioannis V. Yannas, artificial skin (Integra Dermal Regeneration Template)",
     "year_display": "1981",
     "year_sort": 1981,
@@ -1152,7 +1176,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "ラドヴァンのティッシュエキスパンダー乳房再建",
+    "name_ja": "ティッシュエキスパンダーによる乳房再建",
     "name_original": "Radovan temporary tissue expander breast reconstruction",
     "year_display": "1982",
     "year_sort": 1982,
@@ -1168,7 +1192,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "イルーズ（近代脂肪吸引法）",
+    "name_ja": "近代脂肪吸引法",
     "name_original": "Yves-Gérard Illouz, liposuction (suction-assisted lipolysis)",
     "year_display": "1983",
     "year_sort": 1983,
@@ -1184,7 +1208,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "ガリコ ら（超広範囲熱傷児への培養表皮）",
+    "name_ja": "超広範囲熱傷児への培養表皮",
     "name_original": "Gallico, O'Connor, Compton, Kehinde & Green",
     "year_display": "1984",
     "year_sort": 1984,
@@ -1213,10 +1237,22 @@
     "is_first": true,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1984",
+        "author": "Song YG, Chen GZ, Song YL",
+        "title": "The free thigh flap: a new free flap concept based on the septocutaneous artery",
+        "journal": "Br J Plast Surg. 1984;37(2):149–159",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/6713155/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/song-1984.html"
+      }
+    ]
   },
   {
-    "name_ja": "ファーロー（二重対向Z形成による口蓋形成術）",
+    "name_ja": "二重対向Z形成による口蓋形成術（ファーロー法）",
     "name_original": "Leonard T. Furlow Jr., double opposing Z-plasty palatoplasty",
     "year_display": "1986",
     "year_sort": 1986,
@@ -1232,7 +1268,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "テイラー＆パーマーのアンギオソーム（血管領域）概念",
+    "name_ja": "アンギオソーム（血管領域）の概念",
     "name_original": "Angiosome concept (Taylor & Palmer)",
     "year_display": "1987",
     "year_sort": 1987,
@@ -1248,7 +1284,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "テイラー & パーマー（アンジオソーム概念）",
+    "name_ja": "アンジオソーム（血管領域）の概念",
     "name_original": "G. Ian Taylor & J. H. Palmer (angiosome)",
     "year_display": "1987",
     "year_sort": 1987,
@@ -1264,7 +1300,7 @@
     "category_key": "micro"
   },
   {
-    "name_ja": "テイラーのアンジオソーム概念",
+    "name_ja": "アンジオソームの概念",
     "name_original": "G. Ian Taylor & J. H. Palmer, The Vascular Territories (Angiosomes) of the Body",
     "year_display": "1987",
     "year_sort": 1987,
@@ -1284,7 +1320,7 @@
     "name_original": "Deep inferior epigastric perforator (DIEP) flap — original description",
     "year_display": "1989",
     "year_sort": 1989,
-    "author": "Isao Koshima（光嶋勲）& Shusuke Soeda",
+    "author": "Koshima I（光嶋勲）, Soeda S",
     "paper_title": "Inferior epigastric artery skin flaps without rectus abdominis muscle",
     "journal": "British Journal of Plastic Surgery 1989;42(6):645-648",
     "url": "https://www.jprasurg.com/article/0007-1226(89)90075-1/fulltext",
@@ -1293,7 +1329,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1989",
+        "author": "Koshima I, Soeda S",
+        "title": "Inferior epigastric artery skin flaps without rectus abdominis muscle",
+        "journal": "Br J Plast Surg. 1989;42(6):645–648",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/2605399/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/koshima-soeda-1989.html"
+      }
+    ]
   },
   {
     "name_ja": "腓骨皮弁による下顎再建",
@@ -1312,8 +1360,8 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "光嶋 & 副田（穿通枝皮弁の概念）",
-    "name_original": "Isao Koshima & Shogo Soeda (perforator flap)",
+    "name_ja": "穿通枝皮弁の概念 ― DIEP皮弁の原型",
+    "name_original": "Koshima I & Soeda S (perforator flap)",
     "year_display": "1989",
     "year_sort": 1989,
     "author": "Koshima I, Soeda S",
@@ -1325,10 +1373,22 @@
     "is_first": true,
     "confidence": "high",
     "category": "マイクロ・再接着・穿通枝",
-    "category_key": "micro"
+    "category_key": "micro",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1989",
+        "author": "Koshima I, Soeda S",
+        "title": "Inferior epigastric artery skin flaps without rectus abdominis muscle",
+        "journal": "Br J Plast Surg. 1989;42(6):645–648",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/2605399/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/koshima-soeda-1989.html"
+      }
+    ]
   },
   {
-    "name_ja": "イリザロフの仮骨延長（張力‐応力効果）",
+    "name_ja": "仮骨延長（イリザロフ法・張力‐応力効果）",
     "name_original": "Ilizarov distraction osteogenesis (tension-stress effect)",
     "year_display": "1989",
     "year_sort": 1989,
@@ -1344,7 +1404,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "百束のプロペラ皮弁（propeller flap）",
+    "name_ja": "プロペラ皮弁（propeller flap）",
     "name_original": "Propeller flap (Hyakusoku)",
     "year_display": "1991",
     "year_sort": 1991,
@@ -1360,7 +1420,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "マッカーシーの下顎骨延長",
+    "name_ja": "下顎骨延長 ― 仮骨延長の応用",
     "name_original": "McCarthy mandibular distraction osteogenesis",
     "year_display": "1992",
     "year_sort": 1992,
@@ -1392,7 +1452,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "ナガタ法（小耳症耳介再建）",
+    "name_ja": "小耳症の耳介再建（ナガタ法）",
     "name_original": "Nagata method for microtia auricular reconstruction",
     "year_display": "1994",
     "year_sort": 1994,
@@ -1440,7 +1500,7 @@
     "category_key": "named_flap"
   },
   {
-    "name_ja": "コールマンの構造的脂肪注入（ライポストラクチャー）",
+    "name_ja": "構造的脂肪注入（ライポストラクチャー）",
     "name_original": "Coleman structural fat grafting / LipoStructure",
     "year_display": "1995/1997",
     "year_sort": 1995,
@@ -1456,7 +1516,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "アルジェンタ＆モリクワス（陰圧閉鎖療法＝VAC/NPWT）",
+    "name_ja": "陰圧閉鎖療法（VAC／NPWT）",
     "name_original": "Louis C. Argenta & Michael J. Morykwas, Vacuum-Assisted Closure (NPWT)",
     "year_display": "1997",
     "year_sort": 1997,
@@ -1472,7 +1532,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "デュベルナール（世界初のヒト同種手移植）",
+    "name_ja": "世界初のヒト同種手移植",
     "name_original": "Jean-Michel Dubernard & Earl Owen, first human hand allograft",
     "year_display": "1998",
     "year_sort": 1998,
@@ -1488,7 +1548,7 @@
     "category_key": "extra"
   },
   {
-    "name_ja": "コシマのリンパ管細静脈吻合（スーパーマイクロ）",
+    "name_ja": "リンパ管細静脈吻合（スーパーマイクロサージャリー）",
     "name_original": "Koshima lymphaticovenular anastomosis (supermicrosurgery)",
     "year_display": "2000",
     "year_sort": 2000,
@@ -1504,7 +1564,7 @@
     "category_key": "craniofacial"
   },
   {
-    "name_ja": "ビーハンのキーストーン穿通枝島状皮弁",
+    "name_ja": "キーストーン穿通枝島状皮弁",
     "name_original": "Keystone Design Perforator Island Flap (Behan)",
     "year_display": "2003",
     "year_sort": 2003,
@@ -1520,7 +1580,7 @@
     "category_key": "local_flap"
   },
   {
-    "name_ja": "ウェイ & マルディーニ（フリースタイル穿通枝皮弁）",
+    "name_ja": "フリースタイル穿通枝皮弁",
     "name_original": "Fu-Chan Wei & Samir Mardini (free-style free flap)",
     "year_display": "2004",
     "year_sort": 2004,

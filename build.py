@@ -391,6 +391,21 @@ main{padding:26px 0 40px;min-height:50vh}
 .tl{display:none}
 body.view-tl .grid{display:none}
 body.view-tl .tl{display:block}
+body.view-tl .density{display:none}
+
+/* シンプル表示：術式名・年・カテゴリだけを残して一覧性を上げる */
+body.simple .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px}
+body.simple .card{padding:12px 14px;gap:3px}
+body.simple .card .og,
+body.simple .card .au,
+body.simple .card .pp,
+body.simple .card .jr,
+body.simple .card .sig,
+body.simple .card .note,
+body.simple .card .conf-tag,
+body.simple .card .src,
+body.simple .card .papers{display:none}
+body.simple .card .nm{font-size:16.5px;margin-top:3px}
 .era-h{font-family:var(--serif);font-size:22px;font-weight:600;margin:34px 0 2px;padding-bottom:7px;border-bottom:1px solid var(--rule)}
 .era-h .c{font-family:var(--mono);font-size:12px;color:var(--faint);font-weight:400;margin-left:8px}
 .tl-row{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:11px 2px;border-bottom:1px dotted var(--rule);text-decoration:none;color:inherit}
@@ -502,6 +517,18 @@ JS = r"""
   var vList=document.getElementById('v-list'), vTl=document.getElementById('v-tl');
   vList.addEventListener('click',function(){document.body.classList.remove('view-tl');vList.setAttribute('aria-pressed','true');vTl.setAttribute('aria-pressed','false');});
   vTl.addEventListener('click',function(){document.body.classList.add('view-tl');vTl.setAttribute('aria-pressed','true');vList.setAttribute('aria-pressed','false');window.scrollTo(0,0);});
+
+  // 詳細表示 / シンプル表示（選択は次回も保持）
+  var dFull=document.getElementById('d-full'), dSimple=document.getElementById('d-simple');
+  function setDensity(simple,save){
+    document.body.classList.toggle('simple',simple);
+    dSimple.setAttribute('aria-pressed',simple?'true':'false');
+    dFull.setAttribute('aria-pressed',simple?'false':'true');
+    if(save){try{localStorage.setItem('atlas-density',simple?'simple':'full');}catch(e){}}
+  }
+  dFull.addEventListener('click',function(){setDensity(false,true);});
+  dSimple.addEventListener('click',function(){setDensity(true,true);});
+  try{if(localStorage.getItem('atlas-density')==='simple'){setDensity(true,false);}}catch(e){}
   apply();
 })();
 """
@@ -533,6 +560,9 @@ def build_body(entries, episode=None):
 <div class="views" role="group" aria-label="表示切替">
 <button id="v-list" type="button" aria-pressed="true">一覧</button>
 <button id="v-tl" type="button" aria-pressed="false">年表</button></div>
+<div class="views density" role="group" aria-label="情報量の切替">
+<button id="d-full" type="button" aria-pressed="true">詳細表示</button>
+<button id="d-simple" type="button" aria-pressed="false">シンプル表示</button></div>
 </div>
 <div class="chips" role="group" aria-label="カテゴリで絞り込み">
 {chips}

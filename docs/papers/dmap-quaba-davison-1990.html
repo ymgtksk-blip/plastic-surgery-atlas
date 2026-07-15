@@ -128,6 +128,21 @@ main{padding:26px 0 40px;min-height:50vh}
 .tl{display:none}
 body.view-tl .grid{display:none}
 body.view-tl .tl{display:block}
+body.view-tl .density{display:none}
+
+/* シンプル表示：術式名・年・カテゴリだけを残して一覧性を上げる */
+body.simple .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px}
+body.simple .card{padding:12px 14px;gap:3px}
+body.simple .card .og,
+body.simple .card .au,
+body.simple .card .pp,
+body.simple .card .jr,
+body.simple .card .sig,
+body.simple .card .note,
+body.simple .card .conf-tag,
+body.simple .card .src,
+body.simple .card .papers{display:none}
+body.simple .card .nm{font-size:16.5px;margin-top:3px}
 .era-h{font-family:var(--serif);font-size:22px;font-weight:600;margin:34px 0 2px;padding-bottom:7px;border-bottom:1px solid var(--rule)}
 .era-h .c{font-family:var(--mono);font-size:12px;color:var(--faint);font-weight:400;margin-left:8px}
 .tl-row{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:11px 2px;border-bottom:1px dotted var(--rule);text-decoration:none;color:inherit}
