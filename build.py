@@ -594,7 +594,24 @@ figure.paper-fig .fig-cap{display:block}
 figure.paper-fig .fig-src{display:block;margin-top:5px;font-size:12.5px;color:#6d675e}
 figure.paper-fig .fig-src a{color:#6d675e}
 figure.paper-fig .fig-note{display:block;margin-top:4px;font-size:12.5px;color:#8a6a3a}
+
+.pod-box{margin:20px 0 6px;padding:15px 17px;border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+.pod-box h2{font-family:var(--serif);font-size:17px;margin:0 0 3px;display:flex;align-items:center;gap:8px}
+.pod-box .pod-t{font-size:14px;color:var(--muted);margin:0 0 9px}
+.pod-box audio{width:100%;margin-top:4px}
+.pod-box .pod-n{font-size:12.5px;color:#8a6a3a;margin:9px 0 0;line-height:1.65}
 """
+
+def render_podcast(pod):
+    """論文解説の音声（AI生成）。生成物であることを必ず明示する。"""
+    if not pod:
+        return ""
+    dur = f'（約{esc(pod["duration"])}）' if pod.get("duration") else ""
+    note = f'<p class="pod-n">{esc(pod["note"])}</p>' if pod.get("note") else ""
+    return (f'<div class="pod-box"><h2>{HEADPHONE}音声で聴く</h2>'
+            f'<p class="pod-t">{esc(pod.get("title",""))}{dur}</p>'
+            f'<audio controls preload="none" src="{esc(pod["src"])}"></audio>'
+            f'{note}</div>')
 
 def render_figures(figs):
     """CC BY 等・再利用が明示的に許諾された図のみを掲載する。
@@ -653,6 +670,7 @@ def render_commentary_page(d, base):
 <span class="c-links">{" ".join(c_links)}</span>
 </div>
 <p class="lead">{esc(d.get("lead",""))}</p>
+{render_podcast(d.get("podcast"))}
 {secs}
 {takeaways}
 {glossary}

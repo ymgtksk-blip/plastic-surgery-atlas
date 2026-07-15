@@ -1141,7 +1141,19 @@
     "is_first": true,
     "confidence": "medium",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1981",
+        "author": "Yang Guofan（楊果凡）, Chen Baoqi, Gao Yuzhi ら",
+        "title": "Forearm free skin flap transplantation（前臂皮瓣游离移植）",
+        "journal": "National Medical Journal of China（中華医学雑誌）1981;61(3):139-141（英訳再掲: Br J Plast Surg. 1997;50(3):162–165）",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9176001/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/yang-1981.html"
+      }
+    ]
   },
   {
     "name_ja": "人工皮膚（Integra真皮再生テンプレート）",
