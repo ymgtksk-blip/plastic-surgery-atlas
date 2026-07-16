@@ -31,3 +31,14 @@ git add -A && git commit -m "update" && git push
 **原著（Elsevier/Wolters Kluwer 等）の図は著作権上ここに転載しない。**
 掲載してよいのは CC BY 等で再利用が明示的に許諾された図のみで、
 `credit`（著者・誌名・出典URL・ライセンス）は必須。原著の図でない場合は `note` で明示する。
+
+## デプロイ手順（順序厳守）
+
+```bash
+python3 link_commentaries.py                                              # ①解説を entries.json へ配線
+python3 build.py --base-url "https://ymgtksk-blip.github.io/plastic-surgery-atlas"   # ②ビルド(--base-url必須)
+cp dist/index.html dist/sitemap.xml dist/robots.txt dist/og.svg docs/ && cp -R dist/papers/. docs/papers/
+```
+
+①を②の後にやると、entries.json には配線済みなのに公開HTMLにリンクが出ない（実際に踏んだ）。
+`--base-url` の既定値は `https://example.com` で、忘れると robots.txt / sitemap.xml が壊れる。
