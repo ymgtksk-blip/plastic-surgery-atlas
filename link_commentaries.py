@@ -17,6 +17,13 @@ LINKS = {
     "taylor-1975":        ["遊離血管柄付き腓骨（腓骨皮弁）"],
     "ariyan-1979":        ["大胸筋皮弁（ペクトラリス皮弁）"],
     "hartrampf-1982":     ["TRAM皮弁（横軸腹直筋皮弁）"],
+    "taylor-daniel-1973": ["浅下腹壁動脈皮弁（SIEA皮弁）"],
+    "dos-santos-1984":    ["肩甲皮弁／傍肩甲皮弁"],
+    "hyakusoku-1991":     ["プロペラ皮弁（propeller flap）"],
+    "angrigiani-1995":    ["胸背動脈穿通枝皮弁（TAP／TDAP皮弁）"],
+    "allen-tucker-1995":  ["上殿動脈穿通枝皮弁（SGAP皮弁）"],
+    "behan-2003":         ["キーストーン穿通枝島状皮弁"],
+    "wei-mardini-2004":   ["フリースタイル穿通枝皮弁"],
 }
 
 def main():

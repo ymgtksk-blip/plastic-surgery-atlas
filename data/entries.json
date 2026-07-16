@@ -1033,7 +1033,19 @@
     "is_first": true,
     "confidence": "low",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1971 / 1973",
+        "author": "Taylor GI, Daniel RK",
+        "title": "The free flap: composite tissue transfer by vascular anastomosis",
+        "journal": "Aust N Z J Surg. 1973;43(1):1–3",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/4200573/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/taylor-daniel-1973.html"
+      }
+    ]
   },
   {
     "name_ja": "世界初の遊離皮弁移植",
@@ -1153,7 +1165,19 @@
     "is_first": false,
     "confidence": "medium",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1979–1982",
+        "author": "dos Santos LF",
+        "title": "The vascular anatomy and dissection of the free scapular flap",
+        "journal": "Plast Reconstr Surg. 1984;73(4):599–604",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/6709742/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/dos-santos-1984.html"
+      }
+    ]
   },
   {
     "name_ja": "培養表皮自家移植の初臨床",
@@ -1501,7 +1525,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "局所皮弁・皮弁の原理",
-    "category_key": "local_flap"
+    "category_key": "local_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1991",
+        "author": "Hyakusoku H, Yamamoto T, Fumiiri M",
+        "title": "The propeller flap method",
+        "journal": "Br J Plast Surg. 1991;44(1):53–54",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/1993239/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/hyakusoku-1991.html"
+      }
+    ]
   },
   {
     "name_ja": "下顎骨延長 ― 仮骨延長の応用",
@@ -1565,7 +1601,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1995",
+        "author": "Angrigiani C, Grilli D, Siebert J",
+        "title": "Latissimus dorsi musculocutaneous flap without muscle",
+        "journal": "Plast Reconstr Surg. 1995;96(7):1608–1614",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7480280/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/angrigiani-1995.html"
+      }
+    ]
   },
   {
     "name_ja": "上殿動脈穿通枝皮弁（SGAP皮弁）",
@@ -1575,13 +1623,25 @@
     "author": "Fujino（藤野豊美, 1975 遊離殿筋皮弁）；Robert J. Allen & Julian Tucker（1995 穿通枝化）",
     "paper_title": "Fujino: Reconstruction for aplasia of the breast and pectoral region by microvascular transfer of a free flap from the buttock; Allen & Tucker: Superior gluteal artery perforator free flap for breast reconstruction",
     "journal": "Fujino, Plast Reconstr Surg 1975;56:178-181; Allen & Tucker, Plast Reconstr Surg 1995;95:1207-1212",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/7538061/",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/7761507/",
     "significance_ja": "殿部の皮膚・脂肪を筋温存で移植でき、腹部が使えない症例の乳房再建に有用。",
     "history_note_ja": "藤野(1975)が遊離殿筋皮弁による乳房再建を初報告、AllenとTuckerが穿通枝皮弁（SGAP）に洗練させた。",
     "is_first": false,
     "confidence": "medium",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1975 / 1995",
+        "author": "Allen RJ, Tucker C Jr",
+        "title": "Superior gluteal artery perforator free flap for breast reconstruction",
+        "journal": "Plast Reconstr Surg. 1995;95(7):1207–1212",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7761507/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/allen-tucker-1995.html"
+      }
+    ]
   },
   {
     "name_ja": "構造的脂肪注入（ライポストラクチャー）",
@@ -1661,7 +1721,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "局所皮弁・皮弁の原理",
-    "category_key": "local_flap"
+    "category_key": "local_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "2003",
+        "author": "Behan FC",
+        "title": "The Keystone Design Perforator Island Flap in reconstructive surgery",
+        "journal": "ANZ J Surg. 2003;73(3):112–120",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12608972/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/behan-2003.html"
+      }
+    ]
   },
   {
     "name_ja": "フリースタイル穿通枝皮弁",
@@ -1677,7 +1749,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "マイクロ・再接着・穿通枝",
-    "category_key": "micro"
+    "category_key": "micro",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "2004",
+        "author": "Wei FC, Mardini S",
+        "title": "Free-style free flaps",
+        "journal": "Plast Reconstr Surg. 2004;114(4):910–916",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15468398/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/wei-mardini-2004.html"
+      }
+    ]
   },
   {
     "name_ja": "世界初の部分顔面移植",
