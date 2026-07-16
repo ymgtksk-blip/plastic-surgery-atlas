@@ -327,13 +327,25 @@
     "author": "Iginio Tansini (1896/1906); Neven Olivari (1976)",
     "paper_title": "Sopra il mio nuovo processo di amputazione della mammella (Tansini); The latissimus flap (Olivari)",
     "journal": "Gazz Med Ital 1896 / Riforma Med 1906; Olivari, Br J Plast Surg 1976;29:126-128",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/1268896/",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/776304/",
     "significance_ja": "背部から胸壁・乳房を再建できる信頼性の高い筋皮弁で、乳房再建の定番。",
     "history_note_ja": "Tansiniが1896/1906年に原型を記載、長く忘れられた後Olivari(1976)が放射線潰瘍被覆として再導入し普及。",
     "is_first": true,
     "confidence": "medium",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1896 / 1976",
+        "author": "Olivari N",
+        "title": "The latissimus flap",
+        "journal": "Br J Plast Surg. 1976;29(2):126–128",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/776304/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/olivari-1976.html"
+      }
+    ]
   },
   {
     "name_ja": "縮小鼻形成術",
@@ -781,7 +793,19 @@
     "is_first": false,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1965",
+        "author": "Bakamjian VY",
+        "title": "A Two-Stage Method for Pharyngoesophageal Reconstruction with a Primary Pectoral Skin Flap",
+        "journal": "Plast Reconstr Surg. 1965;36(2):173–184",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14339173/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/bakamjian-1965.html"
+      }
+    ]
   },
   {
     "name_ja": "実験的微小血管再接着",
@@ -949,7 +973,19 @@
     "is_first": false,
     "confidence": "medium",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1972",
+        "author": "Orticochea M",
+        "title": "The musculo-cutaneous flap method: an immediate and heroic substitute for the method of delay",
+        "journal": "Br J Plast Surg. 1972;25(2):106–110",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/4553998/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/orticochea-1972.html"
+      }
+    ]
   },
   {
     "name_ja": "世界初の遊離大網移植",
@@ -1061,7 +1097,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1975",
+        "author": "Taylor GI, Miller GDH, Ham FJ",
+        "title": "The free vascularized bone graft. A clinical extension of microvascular techniques",
+        "journal": "Plast Reconstr Surg. 1975;55(5):533–544",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/1096183/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/taylor-1975.html"
+      }
+    ]
   },
   {
     "name_ja": "大胸筋皮弁（ペクトラリス皮弁）",
@@ -1077,7 +1125,19 @@
     "is_first": false,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1979",
+        "author": "Ariyan S",
+        "title": "The pectoralis major myocutaneous flap. A versatile flap for reconstruction in the head and neck",
+        "journal": "Plast Reconstr Surg. 1979;63(1):73–81",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/372988/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/ariyan-1979.html"
+      }
+    ]
   },
   {
     "name_ja": "肩甲皮弁／傍肩甲皮弁",
@@ -1185,7 +1245,19 @@
     "is_first": true,
     "confidence": "high",
     "category": "名前のついた皮弁",
-    "category_key": "named_flap"
+    "category_key": "named_flap",
+    "papers": [
+      {
+        "kind": "原著",
+        "year": "1982",
+        "author": "Hartrampf CR, Scheflan M, Black PW",
+        "title": "Breast reconstruction with a transverse abdominal island flap",
+        "journal": "Plast Reconstr Surg. 1982;69(2):216–225",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/6459602/",
+        "link_label": "原著・抄録",
+        "commentary": "papers/hartrampf-1982.html"
+      }
+    ]
   },
   {
     "name_ja": "ティッシュエキスパンダーによる乳房再建",
