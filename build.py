@@ -910,6 +910,8 @@ def render_entry_page(e, entries, base, og_image):
 <p class="disclaimer">本ページは形成外科の医学史の教育・参照を目的とした非営利のまとめです。年代・出典に史料的な幅がある項目があります。臨床判断・学術引用の際は必ずリンク先の原著・一次資料をご確認ください。</p>
 <a class="backlink" href="../">← 術式の系譜（一覧）に戻る</a>
 </main>"""
+    # 【2026-10-12】f-string内にバックスラッシュを書けない Python 3.10 対策で外に出す
+    ld_json = json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")
     return f"""<!doctype html>
 <html lang="ja"><head>
 <meta charset="utf-8">
@@ -933,7 +935,7 @@ def render_entry_page(e, entries, base, og_image):
 <meta name="theme-color" content="#EFEBE2">
 <link rel="icon" href="{FAVICON}">
 <style>.sr-only{{position:absolute;left:-9999px}}{CSS}{ENTRY_CSS}</style>
-<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")}</script>
+<script type="application/ld+json">{ld_json}</script>
 </head><body>
 {body}
 </body></html>"""
