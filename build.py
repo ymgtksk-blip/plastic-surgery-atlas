@@ -4,10 +4,12 @@
 形成外科 原典データベース「術式の系譜」 静的サイト・ジェネレータ
 data/entries.json（検証済みデータセット）→ dist/index.html（SEO最適化・本文は静的HTML）
                                           → dist/artifact.html（claude.ai Artifactプレビュー用・body only）
+                                          → dist/entries/<slug>.html（全項目の個別ページ＝1術式1URL）
+                                          → dist/papers/<slug>.html（論文の日本語解説ページ）
                                           → dist/sitemap.xml / robots.txt / og.svg
 LLMを使わない決定的ビルド（実行=枠ゼロ）。
 """
-import json, html, pathlib, argparse, datetime, re, collections
+import json, html, pathlib, argparse, datetime, re, collections, unicodedata, hashlib, shutil
 
 ROOT = pathlib.Path(__file__).parent
 DIST = ROOT / "dist"
@@ -85,6 +87,31 @@ def load_entries():
     entries.sort(key=lambda e: (e.get("year_sort", 0), CAT_ORDER.index(e["category_key"]) if e.get("category_key") in CAT_ORDER else 99))
     return entries, len(raw)
 
+def slug_base(e):
+    """個別ページの slug の元＝「年＋原語名」。entries.json に id が無いため、
+    並び順に依存しない値だけから決める（同じデータなら再ビルドしても変わらない）。"""
+    ys = e.get("year_sort", 0) or 0
+    yr = f"bce{-ys}" if ys < 0 else str(ys)
+    s = unicodedata.normalize("NFKD", e.get("name_original", "") or "")
+    s = s.encode("ascii", "ignore").decode("ascii").lower()
+    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+    # 長すぎるURLを避ける（単語の切れ目で60字まで）
+    if len(s) > 60:
+        s = s[:60].rsplit("-", 1)[0]
+    return f"{yr}-{s}" if s else yr
+
+def assign_slugs(entries):
+    """slug を e["_slug"] に付与。万一衝突したら name_ja のハッシュ6桁で区別する（順序非依存）。"""
+    counts = collections.Counter(slug_base(e) for e in entries)
+    for e in entries:
+        b = slug_base(e)
+        if counts[b] > 1:
+            b += "-" + hashlib.sha1(e.get("name_ja", "").encode("utf-8")).hexdigest()[:6]
+        e["_slug"] = b
+    dup = [k for k, v in collections.Counter(e["_slug"] for e in entries).items() if v > 1]
+    if dup:
+        raise SystemExit(f"slug が重複しています: {dup}")
+
 def search_blob(e):
     parts = [e.get("name_ja",""), e.get("name_original",""), e.get("author",""),
              e.get("journal",""), e.get("paper_title",""), e.get("significance_ja",""),
@@ -93,8 +120,9 @@ def search_blob(e):
         parts += [p.get("author",""), p.get("title",""), p.get("journal","")]
     return re.sub(r"\s+", " ", " ".join(parts)).lower()
 
-def render_sources(e):
-    """単一urlの従来項目 → 1リンク。papers[]付き項目 → 複数論文リスト（原著/PDF/日本語解説リンク）。"""
+def render_sources(e, prefix=""):
+    """単一urlの従来項目 → 1リンク。papers[]付き項目 → 複数論文リスト（原著/PDF/日本語解説リンク）。
+    prefix は日本語解説への相対パスの前置き（個別ページ entries/ からは "../"）。"""
     papers = e.get("papers")
     if not papers:
         return (f'<a class="src" href="{esc(e.get("url",""))}" target="_blank" rel="noopener noreferrer">'
@@ -107,7 +135,7 @@ def render_sources(e):
             links.append(f'<a class="pdf" href="{esc(p["pdf"])}" target="_blank" rel="noopener noreferrer">'
                          f'PDF<span aria-hidden="true"> ↓</span></a>')
         if p.get("commentary"):
-            links.append(f'<a class="jp" href="{esc(p["commentary"])}">'
+            links.append(f'<a class="jp" href="{esc(prefix + p["commentary"])}">'
                          f'日本語解説<span aria-hidden="true"> →</span></a>')
         kind = p.get("kind", "")
         kind_html = f'<span class="p-kind">{esc(kind)}</span>' if kind else ""
@@ -159,12 +187,13 @@ def render_card(e, idx):
         f'data-year="{ys}" data-search="{esc(blob)}" id="e{idx}">'
         f'<header class="card-h"><time class="yr"{dt_attr}>{esc(e.get("year_display",""))}</time>'
         f'<span class="chip" style="--c:{color}">{icon(key, "chip-ic")}{esc(label)}</span>{first_html}</header>'
-        f'<h2 class="nm">{esc(e.get("name_ja",""))}</h2>'
+        f'<h2 class="nm"><a href="entries/{esc(e["_slug"])}.html">{esc(e.get("name_ja",""))}</a></h2>'
         f'<p class="og">{esc(e.get("name_original",""))}</p>'
         f'{meta_html}'
         f'<p class="sig">{esc(e.get("significance_ja",""))}</p>'
         f'{conf_html}{note_html}'
         f'{render_sources(e)}'
+        f'<a class="more" href="entries/{esc(e["_slug"])}.html">この術式のページへ<span aria-hidden="true"> →</span></a>'
         f'</article>'
     )
 
@@ -342,6 +371,10 @@ main{padding:26px 0 40px;min-height:50vh}
 .note p{font-size:13px;color:var(--muted);margin-top:6px;padding:2px 0 2px 11px;border-left:2px solid var(--rule)}
 .src{margin-top:13px;font-size:13px;font-weight:600;align-self:flex-start;text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px}
 .src:hover{color:var(--accent-deep);border-color:var(--accent-deep)}
+.nm a{color:inherit;text-decoration:none}
+.nm a:hover{color:var(--accent)}
+.more{margin-top:10px;font-size:12.5px;font-weight:600;align-self:flex-start;text-decoration:none;color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:1px}
+.more:hover{color:var(--accent);border-color:var(--accent)}
 .papers{margin-top:13px}
 .papers-h{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;margin-bottom:8px}
 .paper-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
@@ -404,6 +437,7 @@ body.simple .card .sig,
 body.simple .card .note,
 body.simple .card .conf-tag,
 body.simple .card .src,
+body.simple .card .more,
 body.simple .card .papers{display:none}
 body.simple .card .nm{font-size:16.5px;margin-top:3px}
 .era-h{font-family:var(--serif);font-size:22px;font-weight:600;margin:34px 0 2px;padding-bottom:7px;border-bottom:1px solid var(--rule)}
@@ -637,9 +671,15 @@ def render_figures(figs):
                 f'{note}</figcaption></figure>')
     return out
 
-def render_commentary_page(d, base):
-    """英語原著の日本語解説ページ（教育目的のオリジナル解説。逐語訳ではない）。"""
+def render_commentary_page(d, base, entry_links=(), og_image=""):
+    """英語原著の日本語解説ページ（教育目的のオリジナル解説。逐語訳ではない）。
+    entry_links: この解説を参照する個別ページ [(slug, name_ja), ...]（相互リンク用）。"""
     pp = d.get("paper", {})
+    og_image = og_image or f"{base}/og.svg"
+    entry_html = ""
+    if entry_links:
+        ls = "、".join(f'<a href="../entries/{esc(s)}.html">{esc(n)}</a>' for s, n in entry_links)
+        entry_html = f'<p class="crumb" style="margin-top:26px">この術式の項目ページ：{ls}</p>'
     c_links = [f'<a href="{esc(pp.get("url",""))}" target="_blank" rel="noopener noreferrer">原著（PubMed）<span aria-hidden="true"> ↗</span></a>']
     if pp.get("pdf"):
         c_links.append(f'<a class="pdf" href="{esc(pp["pdf"])}" target="_blank" rel="noopener noreferrer">無料PDF<span aria-hidden="true"> ↓</span></a>')
@@ -674,6 +714,7 @@ def render_commentary_page(d, base):
 {secs}
 {takeaways}
 {glossary}
+{entry_html}
 <p class="disclaimer">本ページは形成外科の学習・参照を目的とした<b>編集部によるオリジナルの日本語解説</b>で、原著（英語）の逐語訳・全文転載ではありません。正確な内容・数値・図は必ず上記リンク先の原著をご確認ください。<br>掲載している図は、<b>原著の図ではありません</b>。原著の図は出版社が著作権を持ち転載できないため、<b>同じ術式・同じ解剖を扱った無料公開（オープンアクセス／CC BY）論文の図</b>を、出典とライセンスを明記して引用しています。</p>
 <a class="backlink" href="../">← 術式の系譜（一覧）に戻る</a>
 </main>"""
@@ -690,14 +731,15 @@ def render_commentary_page(d, base):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{base}/papers/{esc(d.get('slug',''))}.html">
-<meta property="og:image" content="{base}/og.svg">
+<meta property="og:image" content="{og_image}">
 <meta name="theme-color" content="#EFEBE2">
 <style>.sr-only{{position:absolute;left:-9999px}}{CSS}{FIG_CSS}</style>
 </head><body>
 {body}
 </body></html>"""
 
-def build_commentaries(base):
+def build_commentaries(base, entry_links=None, og_image=""):
+    entry_links = entry_links or {}
     cdir = ROOT / "data" / "commentaries"
     if not cdir.exists():
         return []
@@ -707,9 +749,204 @@ def build_commentaries(base):
     for f in sorted(cdir.glob("*.json")):
         d = json.loads(f.read_text(encoding="utf-8"))
         slug = d.get("slug") or f.stem
-        (out / f"{slug}.html").write_text(render_commentary_page(d, base), encoding="utf-8")
+        (out / f"{slug}.html").write_text(render_commentary_page(d, base, entry_links.get(slug, ()), og_image), encoding="utf-8")
         slugs.append(slug)
     return slugs
+
+# ---- 全項目の個別ページ（docs/entries/<slug>.html） ----
+FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237E2B26'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23EFEBE2' font-family='Georgia,serif'%3E系%3C/text%3E%3C/svg%3E")
+
+ENTRY_CSS = """
+.entry-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.entry-page .og{font-size:15px;margin-top:8px}
+.entry-page{overflow-wrap:anywhere}
+.conf-box{background:var(--accent-tint);border:1px solid var(--accent);border-radius:10px;padding:11px 15px;margin-bottom:20px;font-size:14px;color:var(--accent-deep);font-weight:600}
+.conf-box span{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:2px}
+.facts{display:grid;grid-template-columns:7.5em 1fr;gap:7px 14px;margin:0 0 22px;padding:14px 17px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;font-size:14px}
+.facts dt{color:var(--faint);font-size:12.5px;font-weight:700;letter-spacing:.04em;padding-top:1px}
+.facts dd{margin:0;color:var(--ink);min-width:0}
+.facts .yr{font-size:16px}
+.entry-page .papers{margin-top:0}
+.related{margin-top:4px}
+.related .tl-row{grid-template-columns:92px 1fr}
+.jp-box{margin-top:18px;padding:13px 16px;border:1px solid #4E7A6A;border-left-width:3px;border-radius:10px;background:var(--surface);font-size:14px}
+.jp-box a{color:#4E7A6A;font-weight:600}
+@media (max-width:560px){.facts{grid-template-columns:6em 1fr}.related .tl-row{grid-template-columns:70px 1fr;gap:12px}}
+"""
+
+def year_of(e):
+    """year_display から西暦4桁(3桁)を取り出す。紀元前などは返さない（既存JSON-LDと同じ規則）。"""
+    m = re.search(r"\d{3,4}", e.get("year_display", "") or "")
+    return m.group(0) if (m and (e.get("year_sort", 0) or 0) > 0) else ""
+
+def related_entries(e, entries, n=8):
+    """同じカテゴリの項目から、年の近いものを最大 n 件（年順）。"""
+    same = [x for x in entries if x is not e and x.get("category_key") == e.get("category_key")]
+    ys = e.get("year_sort", 0) or 0
+    same.sort(key=lambda x: (abs((x.get("year_sort", 0) or 0) - ys), x["_slug"]))
+    return sorted(same[:n], key=lambda x: (x.get("year_sort", 0) or 0, x["_slug"]))
+
+def commentary_slugs(e):
+    """papers[].commentary（"papers/<slug>.html"）から解説ページの slug を取り出す。"""
+    out = []
+    for p in e.get("papers") or []:
+        m = re.fullmatch(r"papers/([A-Za-z0-9_-]+)\.html", p.get("commentary") or "")
+        if m and m.group(1) not in out:
+            out.append(m.group(1))
+    return out
+
+def entry_citations(e):
+    """JSON-LD の citation（原著）。papers[] があればその各論文、無ければ項目の出典1件。"""
+    if e.get("papers"):
+        cites = []
+        for p in e["papers"]:
+            c = {"@type": "CreativeWork", "name": p.get("title", ""),
+                 "author": {"@type": "Person", "name": p.get("author", "")},
+                 "isPartOf": p.get("journal", ""), "url": p.get("url", "")}
+            m = re.search(r"\d{4}", str(p.get("year", "")))
+            if m:
+                c["datePublished"] = m.group(0)
+            cites.append(c)
+        return cites
+    c = {"@type": "CreativeWork", "name": e.get("paper_title", ""),
+         "author": {"@type": "Person", "name": e.get("author", "")},
+         "isPartOf": e.get("journal", ""), "url": e.get("url", "")}
+    if year_of(e):
+        c["datePublished"] = year_of(e)
+    return [c]
+
+def render_entry_page(e, entries, base, og_image):
+    slug = e["_slug"]
+    url = f"{base}/entries/{slug}.html"
+    key = e.get("category_key", "extra")
+    label, color = cat_label_color(e)
+    name = e.get("name_ja", "")
+    yd = e.get("year_display", "")
+    conf = e.get("confidence", "high")
+    first = e.get("is_first")
+    note = (e.get("history_note_ja") or "").strip()
+    sig = (e.get("significance_ja") or "").strip()
+
+    conf_html = ""
+    if conf == "medium":
+        conf_html = ('<p class="conf-box">※ 史料に諸説あり'
+                     '<span>年代・出典に史料的な幅があります。引用の際は下記の原著・一次資料で必ずご確認ください。</span></p>')
+    elif conf == "low":
+        conf_html = ('<p class="conf-box">※ 出典は要確認'
+                     '<span>出典・年代が十分に確認できていません。引用の際は下記の原著・一次資料で必ずご確認ください。</span></p>')
+    conf_label = {"high": "high（出典確認済み）", "medium": "medium（史料に諸説あり）",
+                  "low": "low（要確認）"}.get(conf, esc(conf))
+    first_html = '<span class="first" title="世界で初めて行われた（とされる）里程標">初</span>' if first else ""
+    first_txt = "「世界初」とされる里程標" if first else "―（「世界初」の指定なし）"
+
+    if e.get("papers"):
+        src_html = render_sources(e, prefix="../")
+    else:
+        src_html = (
+            '<div class="cite-box">'
+            f'<span class="c-au">{esc(e.get("author",""))}</span>'
+            f'<cite class="c-ti">{esc(e.get("paper_title",""))}</cite>'
+            f'<span class="c-jr">{esc(e.get("journal",""))}</span>'
+            f'<span class="c-links"><a href="{esc(e.get("url",""))}" target="_blank" rel="noopener noreferrer">'
+            '原著・出典を見る<span aria-hidden="true"> ↗</span></a></span></div>')
+
+    cslugs = commentary_slugs(e)
+    jp_html = ""
+    if cslugs:
+        ls = "".join(f'<li><a href="../papers/{esc(s)}.html">日本語解説を読む（{esc(s)}）<span aria-hidden="true"> →</span></a></li>'
+                     for s in cslugs)
+        jp_html = (f'<div class="jp-box">この術式には原著の日本語解説ページがあります。'
+                   f'<ul style="margin:6px 0 0;padding-left:20px">{ls}</ul></div>')
+
+    rel = related_entries(e, entries)
+    tl_first = '<span class="tl-first" title="世界初">初</span>'
+    rel_rows = "".join(
+        f'<a class="tl-row" href="{esc(x["_slug"])}.html"><span class="tl-yr">{esc(x.get("year_display",""))}</span>'
+        f'<span class="tl-body"><span class="tl-dot" style="background:{color}"></span>'
+        f'<span class="n">{esc(x.get("name_ja",""))}</span> <span class="o">{esc(x.get("name_original",""))}</span>'
+        f'{tl_first if x.get("is_first") else ""}'
+        f'<span class="a">{esc(x.get("author",""))}</span></span></a>' for x in rel)
+    rel_html = (f'<section class="related"><h2>同じカテゴリの術式（{esc(label)}）</h2>{rel_rows}</section>'
+                if rel else "")
+
+    note_html = f'<section><h2>歴史メモ・「世界初」の背景</h2><p>{esc(note)}</p></section>' if note else ""
+    sig_html = f'<section><h2>意義</h2><p>{esc(sig)}</p></section>' if sig else ""
+
+    title = f"{name}（{yd}）｜術式の系譜"
+    desc = f"{name}（{e.get('name_original','')}、{yd}）。{sig}"
+    if len(desc) > 120:
+        desc = desc[:119] + "…"
+
+    ld = {"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "@id": url + "#breadcrumb", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "術式の系譜", "item": base + "/"},
+            {"@type": "ListItem", "position": 2, "name": name, "item": url}]},
+        {"@type": "WebPage", "@id": url, "url": url, "name": title, "inLanguage": "ja",
+         "description": desc, "isPartOf": {"@id": base + "#website"},
+         "breadcrumb": {"@id": url + "#breadcrumb"},
+         "about": {"@type": "Thing", "name": name, "alternateName": e.get("name_original", "")},
+         "citation": entry_citations(e)},
+    ]}
+    body = f"""<header class="mast"><div class="wrap mast-in">
+<nav class="crumb" aria-label="パンくず"><a href="../">術式の系譜</a> ／ {esc(label)} ／ {esc(name)}</nav>
+<div class="entry-h"><time class="yr"{f' datetime="{year_of(e)}"' if year_of(e) else ""}>{esc(yd)}</time><span class="chip" style="--c:{color}">{icon(key, "chip-ic")}{esc(label)}</span>{first_html}</div>
+<h1 class="title" style="font-size:clamp(23px,3.6vw,34px)">{esc(name)}</h1>
+<p class="og">{esc(e.get("name_original",""))}</p>
+</div></header>
+<main class="wrap paper-page entry-page">
+{conf_html}
+<dl class="facts">
+<dt>人物</dt><dd>{esc(e.get("author",""))}</dd>
+<dt>年</dt><dd>{esc(yd)}</dd>
+<dt>カテゴリ</dt><dd>{esc(label)}</dd>
+<dt>世界初</dt><dd>{first_txt}</dd>
+<dt>信頼度</dt><dd>{conf_label}</dd>
+</dl>
+<section><h2>原著・出典</h2>{src_html}</section>
+{jp_html}
+{sig_html}
+{note_html}
+{rel_html}
+<p class="disclaimer">本ページは形成外科の医学史の教育・参照を目的とした非営利のまとめです。年代・出典に史料的な幅がある項目があります。臨床判断・学術引用の際は必ずリンク先の原著・一次資料をご確認ください。</p>
+<a class="backlink" href="../">← 術式の系譜（一覧）に戻る</a>
+</main>"""
+    return f"""<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(title)}</title>
+<meta name="description" content="{esc(desc)}">
+<meta name="author" content="山形孝介">
+<link rel="canonical" href="{url}">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="術式の系譜">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{og_image}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(title)}">
+<meta name="twitter:description" content="{esc(desc)}">
+<meta name="twitter:image" content="{og_image}">
+<meta name="theme-color" content="#EFEBE2">
+<link rel="icon" href="{FAVICON}">
+<style>.sr-only{{position:absolute;left:-9999px}}{CSS}{ENTRY_CSS}</style>
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")}</script>
+</head><body>
+{body}
+</body></html>"""
+
+def build_entries(entries, base, og_image):
+    out = DIST / "entries"
+    # 古い slug のページが残らないよう毎回作り直す
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    for e in entries:
+        (out / f"{e['_slug']}.html").write_text(render_entry_page(e, entries, base, og_image), encoding="utf-8")
+    return [e["_slug"] for e in entries]
 
 def main():
     ap = argparse.ArgumentParser()
@@ -719,6 +956,7 @@ def main():
     base = args.base_url.rstrip("/")
     gverify = (f'<meta name="google-site-verification" content="{esc(args.google_verify)}">\n' if args.google_verify else "")
     entries, raw_n = load_entries()
+    assign_slugs(entries)
     episode = None
     epf = ROOT / "data" / "podcast_ep1.json"
     mf = ROOT / "data" / "ep1_meta.json"
@@ -729,8 +967,10 @@ def main():
     DIST.mkdir(exist_ok=True)
     body = build_body(entries, episode)
     jsonld = render_jsonld(entries, base)
+    # og.svg は Twitter 等で表示されないため、PNG 版（docs/og.png）があればそちらを使う
+    site_og = f"{base}/og.png" if (ROOT / "docs" / "og.png").exists() else f"{base}/og.svg"
     _cover_png = ROOT / "docs" / "audio" / "cover.png"
-    og_image = f"{base}/audio/cover.png" if (episode and _cover_png.exists()) else f"{base}/og.svg"
+    og_image = f"{base}/audio/cover.png" if (episode and _cover_png.exists()) else site_og
     rss_link = (f'<link rel="alternate" type="application/rss+xml" title="ポッドキャスト" href="{base}/feed.xml">\n'
                 if episode else "")
     podld = ""
@@ -790,13 +1030,25 @@ def main():
 {body}"""
     (DIST / "artifact.html").write_text(artifact, encoding="utf-8")
 
+    # 個別ページ・解説ページ（解説には参照元の個別ページへの戻りリンクを付ける）
+    entry_slugs = build_entries(entries, base, site_og)
+    entry_links = collections.defaultdict(list)
+    for e in entries:
+        for cs in commentary_slugs(e):
+            entry_links[cs].append((e["_slug"], e.get("name_ja", "")))
+    commentary_slugs_built = build_commentaries(base, entry_links, site_og)
+
     # sitemap / robots
     today = datetime.date.today().isoformat()
+    urls = [f'  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>']
+    urls += [f'  <url><loc>{base}/entries/{s}.html</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>'
+             for s in entry_slugs]
+    urls += [f'  <url><loc>{base}/papers/{s}.html</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>'
+             for s in commentary_slugs_built]
     (DIST / "sitemap.xml").write_text(
-        f'<?xml version="1.0" encoding="UTF-8"?>\n'
-        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f'  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>\n'
-        f'</urlset>\n', encoding="utf-8")
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(urls) + "\n</urlset>\n", encoding="utf-8")
     (DIST / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
 
@@ -812,10 +1064,9 @@ def main():
 </svg>"""
     (DIST / "og.svg").write_text(og, encoding="utf-8")
 
-    commentary_slugs = build_commentaries(base)
-
     print(f"built {len(entries)} entries (raw {raw_n}, collapsed {raw_n-len(entries)})")
-    print(f"commentary pages: {len(commentary_slugs)} -> {commentary_slugs}")
+    print(f"entry pages: {len(entry_slugs)}")
+    print(f"commentary pages: {len(commentary_slugs_built)} -> {commentary_slugs_built}")
     print("dist:", *(p.name for p in sorted(DIST.iterdir())))
     print("index.html bytes:", (DIST/'index.html').stat().st_size)
 

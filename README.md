@@ -13,7 +13,9 @@
 ## 構成
 - `data/entries.json` — 検証済みデータセット（複数エージェントによる一次資料のWeb検証を経たもの）。
 - `build.py` — データセット → 静的サイトを生成する決定的ビルダ（外部依存なし・Python 3）。
-- `docs/` — GitHub Pages で公開される生成物。
+- `docs/` — GitHub Pages で公開される生成物（`entries/` 個別ページ、`papers/` 日本語解説）。
+- `check_site.py` — 公開物の整合チェック。
+- `reports/` — データ点検レポート。
 
 ## ビルド / 更新
 ```bash
@@ -38,7 +40,13 @@ git add -A && git commit -m "update" && git push
 python3 link_commentaries.py                                              # ①解説を entries.json へ配線
 python3 build.py --base-url "https://ymgtksk-blip.github.io/plastic-surgery-atlas"   # ②ビルド(--base-url必須)
 cp dist/index.html dist/sitemap.xml dist/robots.txt dist/og.svg docs/ && cp -R dist/papers/. docs/papers/
+rm -rf docs/entries && cp -R dist/entries docs/entries                     # ③全項目の個別ページ（丸ごと入れ替え＝古いslugを残さない）
+python3 check_site.py                                                     # ④整合チェック（個別ページの過不足・sitemap・リンク切れ）
 ```
+
+- 個別ページ `docs/entries/<slug>.html` は entries.json の表示項目すべてに1枚ずつ生成される。slug は「年＋原語名（name_original）」から決まるため、**name_original や year_sort を書き換えると URL が変わる**（古い URL は消える）。
+- `docs/og.png`（og.svg の PNG 版、1200×630）は build.py では作らない静的ファイル。件数が焼き込まれているので、項目数が変わったら作り直す：
+  `chromium --headless=new --hide-scrollbars --window-size=1200,900 --screenshot=og_full.png <og.svgを1200×630で表示するHTML>` → 上端から 1200×630 を切り出して `docs/og.png` に置く。
 
 ①を②の後にやると、entries.json には配線済みなのに公開HTMLにリンクが出ない（実際に踏んだ）。
 `--base-url` の既定値は `https://example.com` で、忘れると robots.txt / sitemap.xml が壊れる。
