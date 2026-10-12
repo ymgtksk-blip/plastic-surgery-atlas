@@ -1,0 +1,710 @@
+{
+  "_about": "英語版の翻訳データ。entries は個別ページの slug をキーにする。src は訳したときの日本語原文のハッシュ（build.py の ja_source_hash）。原文が変わると build.py が警告し、check_site.py が NG にする。author / paper_title / journal / papers は、原データに日本語（読み仮名・説明）が混じる欄だけを英語で上書きする。",
+  "ui": {
+    "site_name": "Genealogy of Reconstructive Operations",
+    "eyebrow": "A source database of plastic surgery",
+    "index_title": "Genealogy of Reconstructive Operations — A Source Database of Plastic Surgery",
+    "index_desc": "From Sushruta (600 BCE) to the present: a searchable database, in chronological order and with links to primary sources, of the original papers on plastic surgery procedures, flaps, skin grafts and microsurgery, and of “the people who first performed them.” {n} entries, with a timeline view.",
+    "thesis": "From Sushruta in 600 BCE to the present — the <b>original papers</b> on the procedures, flaps, skin grafts and microsurgery that shaped plastic surgery, and the <b>people who first performed them</b>, traced in chronological order with links to primary sources.",
+    "stat": "<b>{n}</b> procedures &amp; original papers / 600 BCE–2005 / <b>{firsts}</b> of them are “world first” milestones",
+    "search_label": "Search",
+    "search_placeholder": "Search by procedure, name or flap (e.g. flap, Koshima, TRAM, nose)",
+    "views_label": "Switch view",
+    "view_list": "List",
+    "view_tl": "Timeline",
+    "density_label": "Amount of detail",
+    "density_full": "Detailed",
+    "density_simple": "Simple",
+    "chips_label": "Filter by category",
+    "chip_all": "All",
+    "empty": "No matching procedures found. Try a different search term or category.",
+    "tl_label": "Timeline",
+    "footer_1": "<b>Genealogy of Reconstructive Operations</b> — a non-profit database of plastic surgery procedures and original papers, with links to primary sources. Each entry has been verified on the web by multiple agents.",
+    "footer_2": "Entries whose dates or sources vary among historical sources are marked “※ Historical sources vary.” For medical decisions or citation, always check the linked original papers and primary sources. Corrections and additions are welcome.",
+    "footer_3": "{n} entries / Last updated {date}",
+    "footer_translation": "This English edition is a translation of the Japanese edition. The commentaries on original papers are available in Japanese only.",
+    "lang_switch": "日本語",
+    "view_source": "View original source",
+    "papers_h": "Original and related papers",
+    "jp_commentary": "Japanese commentary",
+    "note_summary": "Historical note: background to the “world first”",
+    "conf_medium_tag": "※ Historical sources vary",
+    "conf_medium_title": "Dates and sources vary among historical sources",
+    "conf_low_tag": "※ Source needs verification",
+    "first_badge": "1st",
+    "first_title": "A milestone regarded as the first performed in the world",
+    "tl_first_title": "World first",
+    "more": "Go to this procedure’s page",
+    "crumb_label": "Breadcrumb",
+    "conf_box_medium": "※ Historical sources vary",
+    "conf_box_medium_sub": "Dates and sources vary among historical sources. When citing, always check the original papers and primary sources below.",
+    "conf_box_low": "※ Source needs verification",
+    "conf_box_low_sub": "The source and date have not been sufficiently confirmed. When citing, always check the original papers and primary sources below.",
+    "fact_person": "Person",
+    "fact_year": "Year",
+    "fact_category": "Category",
+    "fact_first": "World first",
+    "fact_conf": "Confidence",
+    "conf_high_label": "high (source confirmed)",
+    "conf_medium_label": "medium (historical sources vary)",
+    "conf_low_label": "low (needs verification)",
+    "first_yes": "A milestone regarded as a “world first”",
+    "first_no": "— (not designated a “world first”)",
+    "h_sources": "Original paper and source",
+    "h_significance": "Significance",
+    "h_note": "Historical note: background to the “world first”",
+    "h_related": "Procedures in the same category ({label})",
+    "jp_box": "Japanese commentary available — this procedure has a Japanese-language commentary page on the original paper.",
+    "jp_box_link": "Read the Japanese commentary ({slug})",
+    "disclaimer": "This page is a non-profit summary for education and reference on the history of plastic surgery. Dates and sources of some entries vary among historical sources. For clinical decisions or academic citation, always check the linked original papers and primary sources.",
+    "backlink": "← Back to Genealogy of Reconstructive Operations (list)",
+    "entry_title": "{name} ({year}) | Genealogy of Reconstructive Operations"
+  },
+  "categories": {
+    "skin_graft": "Skin grafts",
+    "local_flap": "Local flaps & flap principles",
+    "named_flap": "Named flaps",
+    "micro": "Microsurgery, replantation & perforators",
+    "craniofacial": "Craniofacial & other reconstruction",
+    "history": "History, foundations & pioneers",
+    "extra": "Foundations & other"
+  },
+  "eras": [
+    "Antiquity & Middle Ages",
+    "Early modern (16th–18th centuries)",
+    "19th century",
+    "First half of the 20th century",
+    "Postwar — the dawn of microsurgery",
+    "The age of flaps and perforators",
+    "The present day"
+  ],
+  "paper_kinds": {
+    "原著": "Original",
+    "解剖": "Anatomy",
+    "総説・無料": "Review, free",
+    "臨床研究・無料": "Clinical study, free"
+  },
+  "link_labels": {
+    "原著・抄録": "Original / abstract",
+    "全文（PMC）": "Full text (PMC)"
+  },
+  "entries": {
+    "bce600-sushruta-cheek-flap-sushruta-samhita": {
+      "src": "3e4436081d",
+      "name": "Cheek flap — the origin of Indian rhinoplasty",
+      "significance": "The first written description in history of the fundamental principle of flap surgery: reconstructing a defect with a pedicled local flap (a flap transferred while leaving a pedicle that preserves its blood supply).",
+      "history_note": "The oldest recorded flap reconstruction in the world. It describes reconstructing a nose cut off as a punishment with a pedicled cheek flap, using a leaf to make a template (pattern). It is regarded as the source of the later “Indian” forehead flap. It is widely estimated to have been composed around the 6th century BCE, but the date of composition and the interpretation of the original text vary among historical sources.",
+      "author": "Sushruta",
+      "paper_title": "Sushruta Samhita",
+      "journal": "Ancient Indian surgical treatise (manuscript)"
+    },
+    "1597-tagliacozzi-italian-method-arm-flap-rhinoplasty": {
+      "src": "c6c90b9f0d",
+      "name": "Italian method — nasal reconstruction with an upper-arm flap",
+      "significance": "Systematically described the “distant pedicled flap”: a flap from the upper arm is attached to the nose and divided several weeks later.",
+      "history_note": "A landmark that systematized flap surgery in a single book for the first time. It precisely described the empirical techniques of the Branca and Vianeo families of the 15th century and established them as the “Italian method”; Tagliacozzi is regarded as the founder of modern plastic surgery. Published in Venice in 1597.",
+      "author": "Gaspare Tagliacozzi",
+      "journal": "Book (published in Venice, 1597)"
+    },
+    "1804-giuseppe-baronio-degli-innesti-animali": {
+      "src": "e1f7a8325e",
+      "name": "Animal experiments on autologous skin grafting",
+      "significance": "Excised and regrafted autologous skin in sheep and confirmed its take, showing scientifically for the first time that skin grafting can succeed experimentally.",
+      "history_note": "One of the early controlled scientific grafting experiments in the history of plastic surgery (experimental proof of autologous skin grafting). Published in Milan in 1804.",
+      "paper_title": "Degli innesti animali (On grafting in animals)",
+      "journal": "Stamperia e Fonderia del Genio, Milano (monograph)"
+    },
+    "1816-carpue-s-operation-indian-forehead-flap": {
+      "src": "81bbd0a359",
+      "name": "Introduction of the Indian forehead flap to the West",
+      "significance": "Reintroduced total nasal reconstruction with a midline forehead flap into modern Western surgery, laying the foundation of the standard procedure for nasal reconstruction.",
+      "history_note": "In 1814 he became the first European to perform the Indian rhinoplasty on a patient, and in 1816 he reported two cases. Spread as “Carpue’s operation,” it led to the 19th-century revival of rhinoplasty and to later developments by Gillies and others. In the following year, 1817, a German edition with a preface by Carl von Grafe was also published.",
+      "author": "Joseph Constantine Carpue",
+      "journal": "Book (London, Longman)"
+    },
+    "1823-christian-heinrich-bunger": {
+      "src": "93766c5b55",
+      "name": "First successful free full-thickness skin graft in a human",
+      "significance": "Reconstructed a nose with a completely detached piece of skin from the leg (thigh), and is said to have achieved the first successful take of a free skin graft in a human.",
+      "history_note": "One of the earliest successful free full-thickness skin grafts in a human. The operation is said to have been performed in 1822 and reported in 1823.",
+      "paper_title": "Report of rhinoplasty using a completely free piece of skin from the leg (medial thigh)",
+      "journal": "Journal der practischen Heilkunde (Hufeland’s journal) and other contemporary German reports"
+    },
+    "1837-z-plasty": {
+      "src": "b181969f38",
+      "name": "Z-plasty",
+      "significance": "A basic principle of local flaps: two opposing triangular flaps are transposed to lengthen a scar contracture and change its direction.",
+      "history_note": "First described in 1837 by the Philadelphia anatomist Horner for post-burn ectropion of the lower eyelid. Denonvilliers (1854) followed, Berger (1904) established the modern symmetrical double Z-plasty, and McCurdy (1913) introduced the name “Z-plasty.”",
+      "author": "William E. Horner",
+      "paper_title": "Description of the transposition of two triangular flaps for cicatricial contracture of the lower eyelid (ectropion)",
+      "journal": "Z-Plasty (StatPearls / historical review)"
+    },
+    "1846-william-t-g-morton-ether-day-henry-j-bigelow-report": {
+      "src": "e352366736",
+      "name": "Public demonstration of ether anesthesia",
+      "significance": "Made surgery without pain possible and laid the foundation for the development of time-consuming reconstructive operations.",
+      "history_note": "The world’s first public demonstration of surgical general anesthesia (inhaled ether). 16 October 1846, Massachusetts General Hospital.",
+      "author": "Henry J. Bigelow (demonstration by W. T. G. Morton, 16 October 1846, MGH)",
+      "journal": "Boston Medical and Surgical Journal, 1846 (later reprinted by NEJM on the 100th anniversary)"
+    },
+    "1861-karl-langer-langer-s-cleavage-lines": {
+      "src": "df914ba4dc",
+      "name": "Skin cleavage lines (Langer’s lines)",
+      "significance": "Illustrated the cleavage (tension) lines of the skin systematically for the first time, giving the anatomical basis for planning incision directions that leave less conspicuous scars.",
+      "history_note": "The world’s first systematic description of skin cleavage lines (later translated into English by Gibson and others)."
+    },
+    "1861-bernhard-von-langenbeck-uranoplasty-mucoperiosteal-flap": {
+      "src": "8e13bc8464",
+      "name": "Palatoplasty (von Langenbeck technique)",
+      "significance": "Established cleft palate closure with bipedicled mucoperiosteal flaps and became the prototype of palatoplasty with predictable outcomes (the oldest standard procedure still in use).",
+      "history_note": "The beginning of cleft palate closure with stable outcomes. The existing list had only cleft lip procedures and lacked a cleft palate procedure."
+    },
+    "1867-joseph-lister-on-the-antiseptic-principle-in-the-practice": {
+      "src": "f3d364fc89",
+      "name": "Antisepsis — the principle of antiseptic surgery",
+      "significance": "Drastically reduced postoperative infection by disinfecting wounds with carbolic acid, making it possible to perform flap and grafting operations safely.",
+      "history_note": "A monumental paper that established the principles of modern antiseptic and aseptic surgery. It applied Pasteur’s germ theory to surgery.",
+      "author": "Joseph Lister",
+      "journal": "British Medical Journal, 1867 (address to the BMA in Dublin)"
+    },
+    "1869-jaques-louis-reverdin-greffe-epidermique": {
+      "src": "247eb76168",
+      "name": "Pinch graft",
+      "significance": "Placed tiny pieces of epidermis (pinch grafts) as islands on a granulating wound to serve as starting points for epithelialization, opening the practical beginning of modern skin grafting.",
+      "history_note": "The first demonstration and proposal of modern skin grafting (epidermal grafting). Performed in 1869 on Guyon’s service at the Necker Hospital."
+    },
+    "1869-jacques-louis-reverdin-epidermic-pinch-skin-graft": {
+      "src": "42904a8018",
+      "name": "Free skin grafting — the starting point of modern skin grafting",
+      "significance": "Promoted epithelialization of granulating wound surfaces with small free skin grafts (pinch grafts), laying the foundation of modern skin grafting.",
+      "history_note": "The world’s first clinical report of free skin grafting (8 December 1869, Imperial Society of Surgery, Paris). The starting point of modern skin grafting.",
+      "author": "Jacques-Louis Reverdin"
+    },
+    "1872-louis-leopold-ollier-dermo-epidermic-graft": {
+      "src": "bcb8901a8c",
+      "name": "Split-thickness skin graft (dermo-epidermic graft)",
+      "significance": "Covered wounds with large split-thickness pieces of skin that included part of the dermis along with the epidermis, and showed faster healing and less scar contracture.",
+      "history_note": "Presented the concept of the split-thickness skin graft (dermo-epidermic graft). Together with Thiersch’s, it is called the Ollier–Thiersch graft.",
+      "paper_title": "Report of grafting with large pieces of skin including the dermis (dermo-epidermic grafting)",
+      "journal": "Comptes rendus / contemporary French surgical reports"
+    },
+    "1875-john-reissberg-wolfe-wolfe-graft": {
+      "src": "9a727f9f53",
+      "name": "First report of full-thickness skin grafting",
+      "significance": "Corrected lower eyelid ectropion with a full-thickness piece of skin from the forearm, showing the clinical usefulness of the full-thickness skin graft (FTSG).",
+      "history_note": "A representative description of full-thickness skin grafting (the Wolfe graft). The original paper was published in the BMJ in 1875.",
+      "paper_title": "A new method of performing plastic operations (full-thickness skin graft for ectropion)"
+    },
+    "1886-carl-thiersch-thiersch-graft": {
+      "src": "7dcfc7fe4e",
+      "name": "Thin split-thickness skin graft (Thiersch graft)",
+      "significance": "Established split-thickness pieces of skin cut horizontally as thin as possible, making coverage of large wound surfaces practical and widespread.",
+      "history_note": "Systematized and popularized the thin split-thickness skin graft (Thiersch graft). Presented at the German Society of Surgery in 1886.",
+      "paper_title": "Proposal of thin split-thickness skin grafting (15th Congress of the German Society of Surgery, 1886)"
+    },
+    "1889-carl-manchot-die-hautarterien-des-menschlichen-korpers": {
+      "src": "96bee98cc3",
+      "name": "Anatomy of the cutaneous arteries of the human body",
+      "significance": "Before X-rays, illustrated the cutaneous arteries and vascular territories of the whole body for the first time, laying the direct foundation of the later angiosome concept (Taylor & Palmer, 1987).",
+      "history_note": "The world’s first systematic description of the vascular territories of the skin. Indispensable as the prehistory of Taylor’s angiosome, which was already in the list.",
+      "journal": "F. C. W. Vogel, Leipzig (monograph)"
+    },
+    "1893-fedor-krause-wolfe-krause-graft": {
+      "src": "f0b689e467",
+      "name": "Establishment of full-thickness skin grafting (Wolfe–Krause graft)",
+      "significance": "Recommended full-thickness grafts for cases unsuitable for Thiersch grafts and reported success in many cases, establishing the FTSG as a standard procedure.",
+      "history_note": "Clinically established and popularized full-thickness skin grafting. Together with Wolfe’s, it is called the Wolfe–Krause graft.",
+      "paper_title": "Report of cases of full-thickness skin grafting (German Society of Surgery)"
+    },
+    "1896-latissimus-dorsi-myocutaneous-flap": {
+      "src": "d2e6dd61e6",
+      "name": "Latissimus dorsi myocutaneous flap",
+      "significance": "A reliable myocutaneous flap from the back that can reconstruct the chest wall and breast; a standard choice in breast reconstruction.",
+      "history_note": "Tansini described the prototype in 1896/1906; after being forgotten for a long time, it was reintroduced by Olivari (1976) to cover radiation ulcers and became widespread."
+    },
+    "1898-jacques-joseph-reduction-rhinoplasty": {
+      "src": "12b3feffaf",
+      "name": "Reduction rhinoplasty",
+      "significance": "Originated and systematized surgical reduction of the external nose, laying the foundation of modern functional and aesthetic rhinoplasty (later the classic book Nasenplastik).",
+      "history_note": "Reported reduction rhinoplasty in 1898. Called “the father of modern facial plastic surgery” (the URL is a biographical paper that supports the primary original)."
+    },
+    "1898-robert-abbe-lip-switch-cross-lip-flap": {
+      "src": "92d1a08e46",
+      "name": "Cross-lip flap (Abbe flap)",
+      "significance": "Established reconstruction that transfers tissue from the opposite lip with a cross-lip pedicled flap based on the labial branch of the facial artery; it became a standard procedure in lip reconstruction.",
+      "history_note": "A representative description of the cross-lip flap (is_first=false because Sabattini 1838 is an earlier example)."
+    },
+    "1901-le-fort-classification-of-maxillary-fractures": {
+      "src": "044be8dd88",
+      "name": "Classification of midface fractures (Le Fort classification)",
+      "significance": "Systematized maxillary fractures into three types (I horizontal, II pyramidal, III craniofacial disjunction), laying the anatomical foundation for the treatment of facial fractures.",
+      "history_note": "A classic study that first identified the lines of weakness (fracture lines) of the maxilla through experiments applying blunt force to cadaver heads. It was published in three parts in the Revue de Chirurgie."
+    },
+    "1906-alexis-carrel-charles-claude-guthrie": {
+      "src": "c661eb6493",
+      "name": "Establishment of vascular anastomosis",
+      "significance": "Established end-to-end vascular anastomosis with the triangulation (three stay sutures) technique, laying the technical foundation for all later vascular anastomosis, organ transplantation and microsurgery.",
+      "history_note": "The beginning of modern vascular anastomosis. Carrel received the 1912 Nobel Prize in Physiology or Medicine for this work (Guthrie’s contribution was long underestimated)."
+    },
+    "1917-tubed-pedicle-flap-filatov-gillies": {
+      "src": "98fa914b93",
+      "name": "Tubed pedicle flap",
+      "significance": "The culmination of the distant pedicled flap: the flap is rolled into a tube so that no raw surface is exposed, preventing infection while it is moved in stages to a distant site.",
+      "history_note": "Filatov, an ophthalmologist in Odessa, performed the world’s first tubed flap in 1916 and reported it in 1917 in Vestnik Oftalmologii. Gilles, unaware of the work of Filatov and Ganzer, independently began using tubed flaps in late 1917 (Sidcup, 3 October) and developed them in the reconstruction of facial injuries of the First World War.",
+      "author": "Vladimir P. Filatov / Harold Gillies",
+      "paper_title": "Plastic procedure using a round pedicle",
+      "journal": "Vestnik Oftalmologii (1917) / historical review in a European plastic surgery journal"
+    },
+    "1920-harold-gillies-plastic-surgery-of-the-face": {
+      "src": "26e181934f",
+      "name": "Plastic Surgery of the Face — the foundation of modern plastic surgery",
+      "significance": "Systematized many reconstructive methods, including the tubed pedicle flap, for the facial war wounds of the First World War, and founded modern plastic surgery.",
+      "history_note": "“The father of modern plastic surgery.” Established the tubed pedicle flap. Operated on several thousand patients, performing more than 10,000 operations.",
+      "author": "Harold Delf Gillies",
+      "journal": "London: Henry Frowde / Hodder & Stoughton (monograph)"
+    },
+    "1939-earl-c-padgett-george-j-hood-padgett-hood-dermatome": {
+      "src": "0d65712e44",
+      "name": "Dermatome (instrument for harvesting skin grafts)",
+      "significance": "Realized a rotating drum dermatome whose thickness could be calibrated in thousandths of an inch, making it possible to harvest large, uniform split-thickness skin grafts.",
+      "history_note": "The world’s first practical dermatome with calibrated thickness. Presented at the Western Surgical Association in 1938 and put into practical use in 1939.",
+      "paper_title": "Design of a drum dermatome calibrated for thickness to harvest split-thickness skin (presented at the Western Surgical Association, 1938)",
+      "journal": "Surgery, Gynecology & Obstetrics and related / conference presentation"
+    },
+    "1941-archibald-mcindoe-the-guinea-pig-club-queen-victoria": {
+      "src": "08886f1c4d",
+      "name": "Burn reconstruction and the Guinea Pig Club",
+      "significance": "For severely burned airmen of the Second World War, combined saline baths, staged reconstruction and support for return to society, transforming burn treatment and patient rehabilitation.",
+      "history_note": "Founded the “Guinea Pig Club.” A pioneer in integrating burn reconstruction with psychosocial rehabilitation. The club had 649 members at the end of the war.",
+      "author": "Archibald McIndoe",
+      "paper_title": "Icon of this issue: Sir Archibald McIndoe (biographical article)",
+      "journal": "Biography / historical source (medical history article on PMC)"
+    },
+    "1941-frederic-e-mohs-chemosurgery-mohs-micrographic-surgery": {
+      "src": "6c08c904b7",
+      "name": "Mohs surgery (chemosurgery)",
+      "significance": "Originated the technique of excising skin cancer in stages under microscopic margin control, achieving both a high cure rate and maximal tissue preservation.",
+      "history_note": "The world’s first excision method with microscopic margin control (Arch Surg 1941;42:279, reporting 440 cases)."
+    },
+    "1944-thomas-gibson-peter-b-medawar": {
+      "src": "2c95bd402f",
+      "name": "Experimental basis of transplantation immunology",
+      "significance": "Showed experimentally that the loss of skin allografts is an immunological (biological rejection) phenomenon rather than a matter of surgical technique, founding transplantation immunology. Also observed that a second allograft is rejected more quickly (the second-set response).",
+      "history_note": "The first systematic demonstration that the rejection of skin allografts is an immune response. The starting point of transplantation immunology. The 1943 human paper was co-authored by Gibson & Medawar; the 1944 rabbit paper was by Medawar alone.",
+      "journal": "Journal of Anatomy 1943;77:299-310 and 1944;78:176-199"
+    },
+    "1946-limberg-rhombic-flap": {
+      "src": "f6b23f740d",
+      "name": "Rhombic flap (rhomboid flap / Limberg flap)",
+      "significance": "A geometrically formulated design in which a rhombic defect with internal angles of 60°/120° is closed by transposing an equilateral rhombic flap through 120°.",
+      "history_note": "Developing the concept of “opposing triangular flaps” that he had proposed in 1928, he formulated the rhombic transposition flap mathematically on the basis of studies with paper models. The original is a Russian-language monograph (монография; Leningrad, Medgiz, 1946), later translated into English as a chapter of Modern Trends in Plastic Surgery, edited by Gibson.",
+      "author": "Alexander A. Limberg",
+      "paper_title": "Mathematical principles of local plastic procedures on the surface of the human body",
+      "journal": "Book (Leningrad, Medgiz, 1946)"
+    },
+    "1946-plastic-and-reconstructive-surgery-journal-first-issue": {
+      "src": "2924178cda",
+      "name": "Founding of the journal PRS (Plastic and Reconstructive Surgery)",
+      "significance": "As the world’s first academic journal dedicated to plastic surgery, it promoted the sharing of knowledge and the establishment of the specialty.",
+      "history_note": "The world’s first journal dedicated to plastic surgery. Founded in 1946; founding editor Warren B. Davis.",
+      "author": "Warren B. Davis (founding editor)",
+      "journal": "Plastic and Reconstructive Surgery (now Wolters Kluwer)"
+    },
+    "1952-tennison-randall-triangular-flap-repair": {
+      "src": "86a481e974",
+      "name": "Triangular flap repair (cleft lip; Tennison–Randall technique)",
+      "significance": "One of the geometric standard procedures for unilateral cleft lip repair: on the principle of the Z-plasty, a triangular flap is inserted into the lower part of the lip to gain vertical lip length.",
+      "history_note": "In 1952 Tennison devised the triangular flap using a stencil (a wire template), and in 1959 Randall refined it with precise mathematical construction."
+    },
+    "1953-billingham-brent-medawar-actively-acquired-tolerance-of": {
+      "src": "9189b07b00",
+      "name": "Discovery of acquired immunological tolerance",
+      "significance": "Showed that when cells of another strain are introduced in the neonatal period, skin grafts from that strain are not rejected even in adulthood (acquired immunological tolerance), laying the theoretical foundation for successful transplantation.",
+      "history_note": "Experimental proof of acquired immunological tolerance. Medawar received the 1960 Nobel Prize in Physiology or Medicine."
+    },
+    "1954-joseph-e-murray-first-successful-human-kidney-transplant": {
+      "src": "edf051658f",
+      "name": "World’s first successful kidney transplant",
+      "significance": "Avoided rejection between identical twins and achieved the world’s first successful human kidney transplant, opening the door to organ and tissue transplantation.",
+      "history_note": "The world’s first successful human organ transplant (1954, identical twins). Murray received the 1990 Nobel Prize in Physiology or Medicine.",
+      "journal": "JAMA, 1956;160:277-282 (operation on 1954-12-23)"
+    },
+    "1957-neumann-tissue-expansion-subcutaneous-balloon": {
+      "src": "f9b21a838e",
+      "name": "Tissue expansion",
+      "significance": "The world’s first clinical application of the concept of tissue expansion: skin was gradually stretched with a subcutaneous balloon to obtain extra skin for ear reconstruction.",
+      "history_note": "The world’s first clinical report of tissue expansion. At the time, however, it remained an anecdotal report, and the technique became widespread only after the 1982 report of silicone balloons."
+    },
+    "1957-millard-rotation-advancement-cleft-lip-repair": {
+      "src": "cf2b06f361",
+      "name": "Rotation-advancement repair (cleft lip; Millard technique)",
+      "significance": "A unilateral cleft lip repair that hides the scar at the base of the columella by a medial rotation incision and advancement of the lateral flap. The most widely used procedure in the world.",
+      "history_note": "Conceived in 1955 and first reported in 1957 at the First International Congress of Plastic Surgery. The representative original method of unilateral cleft lip repair, on which countless modifications have been made over the following half-century."
+    },
+    "1959-bernard-seidenberg": {
+      "src": "be68e7cba5",
+      "name": "World’s first free tissue transfer in a human",
+      "significance": "Immediately reconstructed a cervical esophageal defect with a free jejunal segment whose vessels were reconstructed, demonstrating the first vascularized free tissue transfer in a human.",
+      "history_note": "Regarded as the world’s first free tissue transfer reported in a human (free jejunum). Performed in 1957, reported in 1959."
+    },
+    "1959-tanzer-total-auricular-reconstruction-autogenous-costal": {
+      "src": "11dd379f0b",
+      "name": "Total ear reconstruction (Tanzer technique)",
+      "significance": "Established total ear reconstruction for microtia with an autologous costal cartilage framework, which became the prototype of modern ear reconstruction.",
+      "history_note": "Pioneering work that systematized total ear reconstruction with autologous costal cartilage. It became the basis of the later Brent and Nagata techniques."
+    },
+    "1960-julius-h-jacobson-ernesto-l-suarez": {
+      "src": "d2a1c0d244",
+      "name": "The birth of microvascular anastomosis",
+      "significance": "Anastomosed vessels 1–1.4 mm in diameter with a high patency rate under the operating microscope, founding the very concept of “microsurgery.”",
+      "history_note": "The world’s first report of microvascular anastomosis using the operating microscope. The origin of the word “microsurgery.”"
+    },
+    "1960-julius-jacobson-ernesto-suarez-microvascular-anastomosis": {
+      "src": "6cf810f431",
+      "name": "Microvascular anastomosis under the microscope",
+      "significance": "Demonstrated reliable anastomosis of small vessels about 1 mm in diameter under the operating microscope, establishing the technical foundation of microsurgery.",
+      "history_note": "Introduced the word “microsurgery.” A pioneer of microvascular anastomosis under the microscope."
+    },
+    "1962-george-d-winter-moist-wound-healing": {
+      "src": "b0df29ba00",
+      "name": "Demonstration of moist wound healing",
+      "significance": "Proved in pig experiments that a closed, moist environment promotes epithelialization, laying the scientific foundation of modern moist wound healing and the development of dressings.",
+      "history_note": "The world’s first demonstration of the principle of moist wound healing (Nature 193:293)."
+    },
+    "1963-chen-zhongwei": {
+      "src": "4a88a8d879",
+      "name": "World’s first replantation of an amputated limb",
+      "significance": "In January 1963 in Shanghai, replanted a completely amputated forearm; it became the world’s first limb replantation to be successfully performed and reported.",
+      "history_note": "The world’s first replantation of an amputated limb (the earliest to be reported). Malt performed one earlier, in 1962, but Chen reported first (Chin Med J 1963;82:632-638). The Shanghai Sixth People’s Hospital is called “the cradle of limb replantation.”"
+    },
+    "1963-cronin-gerow-silicone-gel-breast-implant": {
+      "src": "c83fe052da",
+      "name": "Silicone breast implant",
+      "significance": "Presented a silicone gel–filled implant developed jointly with Dow Corning, opening the way to practical breast augmentation and breast reconstruction.",
+      "history_note": "The world’s first silicone gel breast implant. Presented at the Third International Congress of Plastic Surgery in Washington in 1963 and introduced to the US market the following year."
+    },
+    "1964-tanner-vandeput-olley-mesh-skin-graft": {
+      "src": "0551ed1c0c",
+      "name": "Mesh skin graft",
+      "significance": "Realized meshing, in which staggered slits are cut in split-thickness skin to expand its area, greatly improving coverage and drainage in extensive burns.",
+      "history_note": "Put expanded grafting of split-thickness skin (up to 1:3) into practical use with the Tanner–Vandeput mesh dermatome."
+    },
+    "1964-ronald-a-malt-charles-f-mckhann": {
+      "src": "14d452996d",
+      "name": "First upper-limb replantation in the West",
+      "significance": "Replanted the completely amputated upper arm of a 12-year-old boy, with recovery of sensation and muscle strength; the first successful limb replantation in the West.",
+      "history_note": "Performed in May 1962 at Massachusetts General Hospital and reported in 1964 (JAMA 1964;189:716-722). The first upper-limb replantation in the Western world."
+    },
+    "1965-deltopectoral-flap-bakamjian-flap": {
+      "src": "885db17bbf",
+      "name": "Deltopectoral flap",
+      "significance": "An axial-pattern chest wall flap based on perforators of the internal thoracic artery; it became the mainstay of head and neck and pharyngoesophageal reconstruction.",
+      "history_note": "A milestone that modernized head and neck reconstruction as a reliable distant pedicled flap. A bridge from random-pattern flaps to axial-pattern flaps."
+    },
+    "1966-harry-j-buncke-w-p-schulz": {
+      "src": "8867944c99",
+      "name": "Experimental microvascular replantation",
+      "significance": "Established instruments and techniques for anastomosing vessels less than 1 mm in outer diameter, and demonstrated with replantation of rabbit ears that anastomosis of vessels 1 mm or smaller is possible.",
+      "history_note": "An experimental milestone that bridged to clinical microsurgery. Buncke is called “the father of microsurgery.”"
+    },
+    "1966-harry-j-buncke-experimental-microvascular-free-tissue": {
+      "src": "7e61f93c2a",
+      "name": "Experimental free flap transfer — the foundation of microsurgery",
+      "significance": "Demonstrated the feasibility of free tissue transfer by microvascular anastomosis, opening the era of free flaps and replantation of amputated digits.",
+      "history_note": "“The father of microsurgery.” Transferred a monkey’s great toe to the hand, demonstrating microvascular free transfer for the first time."
+    },
+    "1967-paul-tessier-craniofacial-surgery-orbital-hypertelorism": {
+      "src": "08a3d8f546",
+      "name": "Founding of craniofacial surgery",
+      "significance": "Made it possible to correct severe facial deformities with osteotomies that treat the intracranial and extracranial regions as one unit (box osteotomy), founding craniofacial surgery.",
+      "history_note": "The founder of craniofacial surgery. The box osteotomy for orbital hypertelorism is still standard today.",
+      "author": "Paul Tessier, G. Guiot, J. Rougerie, et al."
+    },
+    "1968-shigeo-komatsu-susumu-tamai": {
+      "src": "c915d61627",
+      "name": "World’s first replantation of an amputated thumb",
+      "significance": "Replanted a completely amputated thumb by microvascular anastomosis and it survived; the world’s first successful replantation of an amputated digit.",
+      "history_note": "The world’s first successful replantation of an amputated digit (thumb) (PRS 1968;42:374-377). A landmark of microsurgery from Japan."
+    },
+    "1969-john-r-cobbett-toe-to-thumb-transfer": {
+      "src": "e2c4f62d01",
+      "name": "World’s first toe-to-thumb transfer",
+      "significance": "The first toe transfer: the great toe was transferred in one stage by microvascular anastomosis to a thumb defect, reconstructing a functioning thumb.",
+      "history_note": "The world’s first clinically successful free toe-to-thumb transfer (J Bone Joint Surg Br 1969;51(4):677-679)."
+    },
+    "1972-mcgregor-jackson-groin-flap": {
+      "src": "27bb79a9ed",
+      "name": "Groin flap — establishment of the axial-pattern flap",
+      "significance": "An axial-pattern flap based on the superficial circumflex iliac artery and vein, opening the way to long pedicled transfers and later to free flaps.",
+      "history_note": "A representative “axial pattern flap” with a known vessel (the superficial circumflex iliac artery and vein) as its axis. This groin flap was soon transferred as a free flap and became a bridge into the era of microsurgery."
+    },
+    "1972-gracilis-myocutaneous-flap": {
+      "src": "ce64c5cad3",
+      "name": "Gracilis myocutaneous flap",
+      "significance": "A versatile myocutaneous flap using the gracilis of the adductor group, applied to perineal reconstruction, facial nerve reconstruction (functional muscle transfer) and other uses.",
+      "history_note": "One of the pioneering reports presenting the concept of the myocutaneous flap. The original paper discussed the myocutaneous flap method in general, not only the gracilis. Free gracilis transfer was established by Harii (1976)."
+    },
+    "1972-donald-h-mclean-harry-j-buncke": {
+      "src": "eac7c4db00",
+      "name": "World’s first free omental transfer",
+      "significance": "Covered an extensive scalp and skull defect with a free omentum with re-anastomosed vessels plus a skin graft, expanding the clinical application of free tissue transfer.",
+      "history_note": "The world’s first reconstruction using the omentum as a free flap (PRS 1972;49(3):268-274). One of the earliest clinical applications of free tissue transfer."
+    },
+    "1973-axial-vs-random-pattern-flaps-mcgregor-morgan": {
+      "src": "575360c8da",
+      "name": "The concept of axial-pattern and random-pattern flaps",
+      "significance": "Divided flaps into axial-pattern flaps, which have a vascular axis, and random-pattern flaps, which do not, establishing the theoretical framework of modern flap classification.",
+      "history_note": "A landmark paper that proposed the basic concepts of modern flap classification, the “axial pattern flap” and the “random pattern flap.” At Canniesburn Hospital (Glasgow), the vascular territories of four axial-pattern flaps were studied experimentally."
+    },
+    "1973-superficial-inferior-epigastric-artery-siea-flap": {
+      "src": "0f27adfc9a",
+      "name": "Superficial inferior epigastric artery flap (SIEA flap)",
+      "significance": "Allows transfer of lower abdominal skin and fat without sacrificing muscle; a less invasive option for breast reconstruction.",
+      "history_note": "The starting point of SIEA-based free tissue transfer was the report by Antia & Buch (1971) of a free dermis-fat transfer using the superficial inferior epigastric vessels. Note that the first free flap in history, by Taylor & Daniel (1973), was a groin flap (superficial circumflex iliac artery system), not the SIEA flap itself."
+    },
+    "1973-rollin-k-daniel-g-ian-taylor": {
+      "src": "0cdc64729e",
+      "name": "World’s first free flap transfer",
+      "significance": "Transferred a groin flap in one stage by microvascular anastomosis to an exposed area of the lower leg, achieving the first clinically successful one-stage free flap transfer.",
+      "history_note": "The first clinically successful one-stage free skin flap transfer (PRS 1973;52(2):111-117). The dawn of the modern free flap era."
+    },
+    "1974-kiyonori-harii": {
+      "src": "1deb8e9b2e",
+      "name": "Establishment of a clinical series of free flaps",
+      "significance": "Performed 10 consecutive successful free flap transfers, showing that the free flap is a reproducible clinical technique and decisively driving its adoption.",
+      "history_note": "An early large successful series that established the clinical reliability of free flaps (PRS 1974;53(3):259-270). Representative of the dawn of microsurgery in Japan."
+    },
+    "1975-rheinwald-green-serial-cultivation-of-keratinocytes": {
+      "src": "77374ed022",
+      "name": "Cultured epidermis",
+      "significance": "Established a method for serially culturing human epidermal keratinocytes from single cells on 3T3 feeder cells, opening the way to cultured epidermal autografts.",
+      "history_note": "The first serial cultivation of human epidermal keratinocytes. The basis of cultured epidermal autografts (CEA)."
+    },
+    "1975-free-vascularized-fibula-bone-graft": {
+      "src": "06770c99b4",
+      "name": "Free vascularized fibula (fibula flap)",
+      "significance": "Transfers the fibula with its blood supply preserved, allowing one-stage reconstruction of extensive bone defects (limbs, mandible).",
+      "history_note": "The world’s first clinical free vascularized bone graft. The extension of microsurgery to bone reconstruction."
+    },
+    "1979-pectoralis-major-myocutaneous-flap": {
+      "src": "70353f6d5d",
+      "name": "Pectoralis major myocutaneous flap",
+      "significance": "A mainstay pedicled flap based on the thoracoacromial artery that can transfer a large amount of tissue in one stage, revolutionizing head and neck reconstruction.",
+      "history_note": "A monumental flap that revolutionized reconstruction for head and neck cancer. It greatly advanced reconstruction in the era before microsurgery."
+    },
+    "1979-scapular-parascapular-flap": {
+      "src": "d49fba7c75",
+      "name": "Scapular / parascapular flap",
+      "significance": "A free flap based on the septocutaneous branches of the circumflex scapular artery, providing skin of good color and a long pedicle.",
+      "history_note": "In October 1979 Gilbert performed the first free scapular flap transfer in Paris. dos Santos presented the anatomical basis to the English-speaking world, and Nassif (1982) added the parascapular flap.",
+      "author": "L. F. dos Santos (anatomy, 1984) / Gilbert (clinical, 1979); Nassif (parascapular, 1982)"
+    },
+    "1979-first-dorsal-metacarpal-artery-fdma-island-flap-kite-flap": {
+      "src": "9d8a53a503",
+      "name": "First dorsal metacarpal artery flap (kite flap)",
+      "significance": "Transfers the skin of the dorsum of the index finger to the thumb as a neurovascular island flap based on the first dorsal metacarpal artery. Called the “kite flap” because the shape of its pedicle resembles a kite, it became a standard sensate flap for thumb reconstruction. The starting point of the family of dorsal metacarpal artery flaps.",
+      "history_note": "In 1979 Foucher and Braun reported reconstruction of the thumb with an island flap from the dorsum of the index finger, stating that there was no flap necrosis in 12 consecutive cases. Because the flap contains a constant artery (the first metacarpal artery), good veins and terminal branches of the superficial branch of the radial nerve, its sensation and blood supply are stable. It became the origin of the later reverse-flow and perforator (DMAP flap) types.",
+      "papers": [
+        {},
+        {"journal": "World J Plast Surg. 2018;7(2):151–158 (open access)"}
+      ]
+    },
+    "1981-o-connor-mulliken-banks-schlegel-kehinde-green": {
+      "src": "e13936348c",
+      "name": "First clinical use of cultured epidermal autografts",
+      "significance": "Grafted sheets of epidermis cultured from autologous epidermal cells onto burn wounds, achieving the first successful clinical application of cultured epidermal autografts.",
+      "history_note": "The world’s first application of cultured epidermal autografts (CEA) in the clinical treatment of burns."
+    },
+    "1981-ponten-fasciocutaneous-flap-super-flap": {
+      "src": "e2e7b5d608",
+      "name": "Fasciocutaneous flap",
+      "significance": "Including the deep fascia in the flap stabilizes its blood supply, making it possible to raise larger flaps than before, even in the lower leg.",
+      "history_note": "The paper that first established the concept of the fasciocutaneous flap. It reported 23 flaps in the lower leg and broke through the limits on the length-to-width ratio of random-pattern flaps. Because of its good blood supply and safety, it was called the “super flap.”",
+      "author": "Bengt Ponten"
+    },
+    "1981-radial-forearm-flap-chinese-flap": {
+      "src": "64488fd189",
+      "name": "Radial forearm flap (Chinese flap)",
+      "significance": "A thin, pliable free flap with a rich blood supply. A standard option for intraoral, pharyngeal and limb reconstruction.",
+      "history_note": "Based on cadaver injection studies in 1978 at the General Hospital of the Shenyang Military Region, it was first reported in Chinese in 1981 (the English republication describes 56 cases).",
+      "author": "Yang Guofan (楊果凡), Chen Baoqi, Gao Yuzhi, et al.",
+      "paper_title": "Forearm free skin flap transplantation (前臂皮瓣游离移植)",
+      "journal": "National Medical Journal of China (中華医学雑誌) 1981;61(3):139-141",
+      "papers": [
+        {
+          "author": "Yang Guofan (楊果凡), Chen Baoqi, Gao Yuzhi, et al.",
+          "title": "Forearm free skin flap transplantation (前臂皮瓣游离移植)",
+          "journal": "National Medical Journal of China (中華医学雑誌) 1981;61(3):139-141 (English republication: Br J Plast Surg. 1997;50(3):162–165)"
+        }
+      ]
+    },
+    "1981-john-f-burke-ioannis-v-yannas-artificial-skin-integra": {
+      "src": "5c51b327fb",
+      "name": "Artificial skin (Integra Dermal Regeneration Template)",
+      "significance": "Developed a bilayer collagen–chondroitin sulfate artificial skin (later Integra), making wound closure by dermal regeneration possible in extensive burns.",
+      "history_note": "The world’s first practical artificial skin (dermal regeneration template), and a pioneer of tissue engineering aiming at regeneration rather than scarring."
+    },
+    "1982-transverse-rectus-abdominis-myocutaneous-tram-flap": {
+      "src": "773a9b42b1",
+      "name": "TRAM flap (transverse rectus abdominis myocutaneous flap)",
+      "significance": "Reconstructs the breast with lower abdominal autologous tissue while also serving as an abdominoplasty; the foundation of autologous breast reconstruction.",
+      "history_note": "A monumental procedure that marked the dawn of modern autologous breast reconstruction. The parent of the later DIEP/SIEA flaps."
+    },
+    "1982-radovan-temporary-tissue-expander-breast-reconstruction": {
+      "src": "71f8e53371",
+      "name": "Breast reconstruction with a tissue expander",
+      "significance": "Established a two-stage method in which the skin is expanded with an expander after mastectomy and the breast is then reconstructed with an implant.",
+      "history_note": "Applied tissue expansion to breast reconstruction in earnest, laying the foundation of modern two-stage implant reconstruction."
+    },
+    "1983-yves-gerard-illouz-liposuction-suction-assisted-lipolysis": {
+      "src": "82b79d6be9",
+      "name": "Modern liposuction",
+      "significance": "Systematized liposuction without skin excision using a tunneling technique with blunt cannulas and high-vacuum suction, establishing modern body contouring.",
+      "history_note": "Established modern liposuction as the “Illouz technique” (is_first=false because there are earlier initial reports)."
+    },
+    "1984-gallico-o-connor-compton-kehinde-green": {
+      "src": "1effc6d819",
+      "name": "Cultured epidermis for children with massive burns",
+      "significance": "Saved two children who had lost most of their body surface with cultured epidermal autografts, demonstrating that CEA is effective for permanent coverage of massive burns.",
+      "history_note": "Showed permanent coverage of massive burns with cultured epidermis (proof of concept)."
+    },
+    "1984-anterolateral-thigh-alt-flap": {
+      "src": "2fcf20def6",
+      "name": "Anterolateral thigh flap (ALT flap)",
+      "significance": "A versatile free flap based on the descending branch of the lateral circumflex femoral artery; with little donor-site morbidity, it is a mainstay of modern reconstruction.",
+      "history_note": "The original paper on the ALT flap, which spread worldwide as an “all-round flap.”",
+      "author": "Yu-Guang Song (宋業光), Guang-Zhen Chen, Yong-Lin Song"
+    },
+    "1986-leonard-t-furlow-jr-double-opposing-z-plasty-palatoplasty": {
+      "src": "b45438c094",
+      "name": "Palatoplasty by double opposing Z-plasty (Furlow technique)",
+      "significance": "Established a palatoplasty that repositions the soft palate muscles by reversing the oral and nasal layers with opposing Z-plasties, improving speech outcomes and elevation of the velum.",
+      "history_note": ""
+    },
+    "1987-angiosome-concept-taylor-palmer": {
+      "src": "4672026ac8",
+      "name": "The angiosome (vascular territory) concept",
+      "significance": "Divided the whole body into three-dimensional vascular territories (angiosomes), one for each source artery, providing an anatomical map for flap design.",
+      "history_note": "Developing the anatomical studies of Manchot and Salmon, systematized the vascular territories of the whole body with ink injection and radiographic contrast studies. A monumental paper that became the theoretical foundation of the era of flaps and perforator flaps."
+    },
+    "1987-g-ian-taylor-j-h-palmer-angiosome": {
+      "src": "2f4e48187d",
+      "name": "The angiosome (vascular territory) concept",
+      "significance": "Divided the whole body into three-dimensional vascular territories (angiosomes) supplied by source arteries, systematizing the anatomical principles of flap design.",
+      "history_note": "A monumental paper that proposed the “angiosome” concept (Br J Plast Surg 1987;40(2):113-141). The foundation of later flap and perforator flap theory."
+    },
+    "1989-fibula-free-flap-for-mandible-reconstruction": {
+      "src": "b40f940bb0",
+      "name": "Mandible reconstruction with the fibula flap",
+      "significance": "With sufficient length, suitable shape and low donor-site morbidity, it established the gold standard for mandible reconstruction.",
+      "history_note": "A monumental report that systematized the free fibula flap for mandible reconstruction."
+    },
+    "1989-koshima-i-soeda-s-perforator-flap": {
+      "src": "511a991faf",
+      "name": "The perforator flap concept — the prototype of the DIEP flap",
+      "significance": "Reported a flap based only on perforators passing through the muscle, without sacrificing the rectus abdominis, founding the muscle-sparing perforator flap concept.",
+      "history_note": "The beginning of the “perforator flap” concept (Br J Plast Surg 1989;42(6):645-648). The origin of later muscle-sparing reconstruction such as the DIEP flap. From Japan."
+    },
+    "1989-ilizarov-distraction-osteogenesis-tension-stress-effect": {
+      "src": "97308b30a0",
+      "name": "Distraction osteogenesis (Ilizarov method; tension-stress effect)",
+      "significance": "Demonstrated the principle that slow traction induces the formation of new bone and soft tissue, establishing the biological basis of distraction osteogenesis.",
+      "history_note": "The theory of the tension-stress effect, developed through limb lengthening, became the scientific basis of later craniofacial distraction."
+    },
+    "1990-dorsal-metacarpal-artery-perforator-dmap-flap": {
+      "src": "2c0a6c55e5",
+      "name": "Dorsal metacarpal artery perforator flap (DMAP flap)",
+      "significance": "A distally based island flap pedicled on a single cutaneous perforator that is constantly present at the metacarpal neck (about 0.5–1 cm proximal to the MP joint), without dissecting the main trunk of the dorsal metacarpal artery. It covers defects of the dorsal fingers, web spaces and dorsum of the hand with thin tissue and little invasiveness, and, commonly called the Quaba flap, is one of the workhorse flaps of hand reconstruction.",
+      "history_note": "Building on the anatomical evidence of Earley & Milner (1987), dorsal metacarpal artery flaps were reported in quick succession in 1990 by Maruyama (the reverse type, which uses the main trunk with reverse flow) and by Quaba & Davison (the distally based type raised on a single direct cutaneous perforator). The latter became linked with Koshima’s (1989) perforator flap concept and came to be called the DMAP flap = Quaba flap. The perforators are constant at the metacarpal necks of the second to fourth web spaces.",
+      "author": "Quaba AA, Davison PM, et al.",
+      "papers": [
+        {"title": "Dorsal metacarpal flaps (anatomical basis)"},
+        {"title": "The reverse dorsal metacarpal flap (reverse flow)"},
+        {"title": "The distally-based dorsal hand flap (perforator = the original DMAP paper)"},
+        {"journal": "Cureus. 2020;12(10):e11251 (open access)"}
+      ]
+    },
+    "1991-propeller-flap-hyakusoku": {
+      "src": "a21a8ba9d4",
+      "name": "Propeller flap",
+      "significance": "A procedure in which a flap is rotated like a propeller around a central subcutaneous pedicle to reconstruct scar contractures and other defects with local tissue.",
+      "history_note": "The original paper that first used the name “propeller flap” (Hyakusoku, Yamamoto, Fumiiri). It was devised at Nippon Medical School to treat post-burn contractures, and was later developed by Hallock (2006) and others into the propeller flap pivoting on a perforator.",
+      "author": "Hiko Hyakusoku (百束比古) et al."
+    },
+    "1992-mccarthy-mandibular-distraction-osteogenesis": {
+      "src": "773cb3b873",
+      "name": "Mandibular distraction — an application of distraction osteogenesis",
+      "significance": "Applied gradual distraction to mandibular hypoplasia such as hemifacial microsomia, opening the clinical field of facial bone distraction.",
+      "history_note": "The world’s first clinical application of distraction osteogenesis to the human mandible. Lengthening of 18–24 mm was achieved in four children."
+    },
+    "1994-diep-flap-for-breast-reconstruction": {
+      "src": "7924456cfe",
+      "name": "Breast reconstruction with the DIEP flap",
+      "significance": "Reconstructs the breast with lower abdominal tissue while preserving all of the muscle, greatly reducing abdominal wall hernia and loss of muscle strength.",
+      "history_note": "Popularized the DIEP flap for breast reconstruction and made it the gold standard of autologous reconstruction."
+    },
+    "1994-nagata-method-for-microtia-auricular-reconstruction": {
+      "src": "24386c4ff9",
+      "name": "Ear reconstruction for microtia (Nagata technique)",
+      "significance": "Builds a three-dimensional framework from autologous costal cartilage and reconstructs lobule-type microtia in two operations. It became the worldwide gold standard for total ear reconstruction.",
+      "history_note": "An improved method from Japan that reduced the operations of Tanzer (6) and Brent (4) to two. The series of papers was published in the February 1994 issue of Plast Reconstr Surg."
+    },
+    "1995-thoracodorsal-artery-perforator-tdap-tap-flap": {
+      "src": "c7d24aa75e",
+      "name": "Thoracodorsal artery perforator flap (TAP / TDAP flap)",
+      "significance": "A skin island can be raised on a single perforator while preserving the latissimus dorsi, combining preservation of function with low donor-site morbidity.",
+      "history_note": "The first description of the thoracodorsal artery perforator flap, which does not sacrifice the latissimus dorsi."
+    },
+    "1995-superior-gluteal-artery-perforator-sgap-flap": {
+      "src": "02ad924469",
+      "name": "Superior gluteal artery perforator flap (SGAP flap)",
+      "significance": "Allows transfer of gluteal skin and fat while sparing the muscle; useful for breast reconstruction in patients whose abdomen cannot be used.",
+      "history_note": "Fujino (1975) first reported breast reconstruction with a free gluteal myocutaneous flap, and Allen and Tucker refined it into a perforator flap (SGAP).",
+      "author": "Fujino (藤野豊美, 1975 free gluteal myocutaneous flap); Robert J. Allen & Julian Tucker (1995 conversion to a perforator flap)"
+    },
+    "1995-coleman-structural-fat-grafting-lipostructure": {
+      "src": "4bd9a0b755",
+      "name": "Structural fat grafting (LipoStructure)",
+      "significance": "Standardized fat grafting injected in small amounts in multiple layers, establishing autologous fat as a lasting material for soft-tissue filling and regeneration.",
+      "history_note": "Demonstrated the survival of fat grafts and turned fat grafting into a defined procedure, laying the foundation of modern fat grafting (face, breast)."
+    },
+    "1997-louis-c-argenta-michael-j-morykwas-vacuum-assisted-closure": {
+      "src": "7ea08e59e2",
+      "name": "Negative pressure wound therapy (VAC / NPWT)",
+      "significance": "Introduced into clinical practice negative pressure wound therapy, which applies controlled negative pressure (about 125 mmHg) to an open-cell foam to promote granulation and wound contraction, transforming the management of intractable wounds.",
+      "history_note": "The clinical establishment of negative pressure wound therapy (VAC/NPWT) (published in two parts: animal studies and clinical experience)."
+    },
+    "1998-jean-michel-dubernard-earl-owen-first-human-hand-allograft": {
+      "src": "6159596574",
+      "name": "World’s first human hand allograft",
+      "significance": "Performed the world’s first successful human hand allograft in Lyon on 23 September 1998, opening the era of vascularized composite allotransplantation (VCA).",
+      "history_note": "The world’s first human hand transplant (the first six months after surgery were reported in Lancet 1999;353:1315). Together with the face transplant already in the list, it is a starting point of VCA.",
+      "author": "Jean-Michel Dubernard; Earl Owen; Guillaume Herzberg; Marco Lanzetta; Nadey S. Hakim, et al."
+    },
+    "2000-koshima-lymphaticovenular-anastomosis-supermicrosurgery": {
+      "src": "a16db3a96b",
+      "name": "Lymphaticovenular anastomosis (supermicrosurgery)",
+      "significance": "Established supermicrosurgery that anastomoses lymphatic vessels and venules smaller than 0.8 mm, treating lymphedema with minimal invasiveness.",
+      "history_note": "A procedure from Japan that systematized LVA (lymphaticovenular anastomosis) by supermicrosurgery. It gave rise to the current trend in lymphatic surgery."
+    },
+    "2003-keystone-design-perforator-island-flap-behan": {
+      "src": "f59902206e",
+      "name": "Keystone perforator island flap",
+      "significance": "A perforator-dependent island flap shaped like an arched trapezoid (keystone) that allows simple, minimally invasive primary closure of defects anywhere from the scalp to the foot.",
+      "history_note": "The original paper that first described the concept of the “keystone flap.” Drawing on experience with 300 cases over the preceding seven years, it presented five cases and became a new option for reconstruction after excision of skin cancer.",
+      "author": "Felix C. Behan"
+    },
+    "2004-fu-chan-wei-samir-mardini-free-style-free-flap": {
+      "src": "504dc94670",
+      "name": "Free-style perforator flap",
+      "significance": "Established the “free-style” technique of raising a flap from any site, relying only on a perforator signal confirmed by preoperative Doppler.",
+      "history_note": "Proposed the free-style concept of raising a flap starting from a perforator, unconstrained by known anatomy (PRS 2004;114(4):910-916). It greatly expanded the freedom of perforator flaps."
+    },
+    "2005-first-partial-face-allograft-devauchelle-dubernard": {
+      "src": "d7bac8a974",
+      "name": "World’s first partial face transplant",
+      "significance": "Performed a composite tissue allograft of the nose and perioral region in a patient who had lost the face through injury, opening the era of face transplantation.",
+      "history_note": "The world’s first partial face transplant, performed in Amiens, France, on 27 November 2005 (patient: Isabelle Dinoire)."
+    }
+  }
+}

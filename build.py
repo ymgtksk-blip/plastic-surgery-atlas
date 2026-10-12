@@ -6,8 +6,9 @@ data/entries.json（検証済みデータセット）→ dist/index.html（SEO�
                                           → dist/artifact.html（claude.ai Artifactプレビュー用・body only）
                                           → dist/entries/<slug>.html（全項目の個別ページ＝1術式1URL）
                                           → dist/papers/<slug>.html（論文の日本語解説ページ）
+                                          → dist/en/index.html, dist/en/entries/<slug>.html（英語版。訳は data/i18n/en.json）
                                           → dist/sitemap.xml / robots.txt / og.svg
-LLMを使わない決定的ビルド（実行=枠ゼロ）。
+LLMを使わない決定的ビルド（実行=枠ゼロ）。Python 3.10 で動くこと（f-string 内にバックスラッシュを書かない）。
 """
 import json, html, pathlib, argparse, datetime, re, collections, unicodedata, hashlib, shutil
 
@@ -63,6 +64,148 @@ HERO_SVG = ('<svg class="hero-emblem" viewBox="0 0 120 120" fill="none" stroke="
 def esc(s):
     return html.escape(str(s if s is not None else ""), quote=True)
 
+# ---- 多言語化：日本語＝原本（entries.json）、英語＝data/i18n/en.json の訳 ----
+# 画面の文言。日本語は従来 build.py に直書きしていたものをそのまま集めた（出力は変えない）。
+JA_UI = {
+    "site_name": "術式の系譜",
+    "lang_switch": "English",
+    "view_source": "原著・出典を見る",
+    "papers_h": "原著・関連論文",
+    "jp_commentary": "日本語解説",
+    "note_summary": "歴史注・「世界初」の背景",
+    "conf_medium_tag": "※ 史料に諸説あり",
+    "conf_medium_title": "年代・出典に史料的な幅があります",
+    "conf_low_tag": "※ 出典は要確認",
+    "first_badge": "初",
+    "first_title": "世界で初めて行われた（とされる）里程標",
+    "tl_first_title": "世界初",
+    "more": "この術式のページへ",
+    "search_label": "検索",
+    "search_placeholder": "術式・人名・皮弁名で検索（例：皮弁, Koshima, TRAM, 鼻）",
+    "views_label": "表示切替",
+    "view_list": "一覧",
+    "view_tl": "年表",
+    "density_label": "情報量の切替",
+    "density_full": "詳細表示",
+    "density_simple": "シンプル表示",
+    "chips_label": "カテゴリで絞り込み",
+    "chip_all": "すべて",
+    "empty": "該当する術式が見つかりません。検索語やカテゴリを変えてお試しください。",
+    "tl_label": "年表",
+    "crumb_label": "パンくず",
+    "conf_box_medium": "※ 史料に諸説あり",
+    "conf_box_medium_sub": "年代・出典に史料的な幅があります。引用の際は下記の原著・一次資料で必ずご確認ください。",
+    "conf_box_low": "※ 出典は要確認",
+    "conf_box_low_sub": "出典・年代が十分に確認できていません。引用の際は下記の原著・一次資料で必ずご確認ください。",
+    "fact_person": "人物",
+    "fact_year": "年",
+    "fact_category": "カテゴリ",
+    "fact_first": "世界初",
+    "fact_conf": "信頼度",
+    "conf_high_label": "high（出典確認済み）",
+    "conf_medium_label": "medium（史料に諸説あり）",
+    "conf_low_label": "low（要確認）",
+    "first_yes": "「世界初」とされる里程標",
+    "first_no": "―（「世界初」の指定なし）",
+    "h_sources": "原著・出典",
+    "h_significance": "意義",
+    "h_note": "歴史メモ・「世界初」の背景",
+    "h_related": "同じカテゴリの術式（{label}）",
+    "jp_box": "この術式には原著の日本語解説ページがあります。",
+    "jp_box_link": "日本語解説を読む（{slug}）",
+    "disclaimer": "本ページは形成外科の医学史の教育・参照を目的とした非営利のまとめです。年代・出典に史料的な幅がある項目があります。臨床判断・学術引用の際は必ずリンク先の原著・一次資料をご確認ください。",
+    "backlink": "← 術式の系譜（一覧）に戻る",
+    "entry_title": "{name}（{year}）｜術式の系譜",
+}
+
+# 本文の訳す欄（日本語は entries.json の *_ja、英語は en.json の entries[slug]）
+JA_FIELD = {"name": "name_ja", "significance": "significance_ja", "history_note": "history_note_ja"}
+# 英語で上書きできる書誌欄（原データに読み仮名・日本語の説明が混じるものだけ en.json に書く）
+OVERRIDABLE = ("author", "paper_title", "journal")
+PAPER_OVERRIDABLE = ("author", "title", "journal")
+
+def make_lang(lang, i18n=None):
+    """描画に使う言語ごとの設定。lang="ja" は従来どおりの日本語。"""
+    if lang == "ja":
+        return {"lang": "ja", "ui": JA_UI, "cat": {k: v[0] for k, v in CAT.items()},
+                "eras": [x[2] for x in ERAS], "paper_kinds": {}, "link_labels": {},
+                "html_lang": "ja", "og_locale": "ja_JP", "og_locale_alt": "en_US"}
+    return {"lang": "en", "ui": i18n["ui"], "cat": i18n["categories"], "eras": i18n["eras"],
+            "paper_kinds": i18n.get("paper_kinds", {}), "link_labels": i18n.get("link_labels", {}),
+            "html_lang": "en", "og_locale": "en_US", "og_locale_alt": "ja_JP"}
+
+L_JA = make_lang("ja")
+
+def tx(e, field, L):
+    """項目の表示文字列。英語は en.json の訳（書誌欄は上書きがあればそれ、無ければ原データ）。"""
+    if L["lang"] == "ja":
+        return e.get(JA_FIELD.get(field, field), "") or ""
+    t = e["_en"]
+    if field in t:
+        return t[field] or ""
+    if field in JA_FIELD:
+        return ""
+    return e.get(field, "") or ""
+
+def ptx(e, i, p, field, L):
+    """papers[i] の表示文字列。種別・リンク名は対応表で訳し、書誌は上書きがあれば使う。"""
+    v = p.get(field, "")
+    if L["lang"] == "ja":
+        return v
+    if field == "kind":
+        return L["paper_kinds"].get(v, v)
+    if field == "link_label":
+        return L["link_labels"].get(v, v)
+    ov = (e["_en"].get("papers") or [])
+    if i < len(ov) and field in ov[i]:
+        return ov[i][field]
+    return v
+
+def orig_name(e, L):
+    """原語名。英語版で術式名と同じ文字列になる場合は重ねて出さない（空を返す）。"""
+    og = e.get("name_original", "") or ""
+    if L["lang"] != "ja" and og.strip().casefold() == tx(e, "name", L).strip().casefold():
+        return ""
+    return og
+
+def ja_source_hash(e):
+    """訳の元になった日本語（本文・書誌）のハッシュ。原文が変わったら訳の見直しが要る。"""
+    src = [e.get(k, "") for k in ("name_ja", "significance_ja", "history_note_ja") + OVERRIDABLE]
+    for p in e.get("papers") or []:
+        src += [p.get(k, "") for k in PAPER_OVERRIDABLE + ("kind", "link_label")]
+    return hashlib.sha1(json.dumps(src, ensure_ascii=False).encode("utf-8")).hexdigest()[:10]
+
+def load_i18n(lang="en"):
+    return json.loads((ROOT / "data" / "i18n" / f"{lang}.json").read_text(encoding="utf-8"))
+
+def attach_translations(entries, i18n):
+    """各項目に e["_en"] を付ける。訳が無い項目があれば止める（英語ページに日本語が混ざるのを防ぐ）。
+    戻り値は原文が訳した後に変わった項目の slug（警告用）。"""
+    tr = i18n.get("entries", {})
+    missing = [e["_slug"] for e in entries if e["_slug"] not in tr
+               or not tr[e["_slug"]].get("name")
+               or (e.get("significance_ja") and not tr[e["_slug"]].get("significance"))
+               or ((e.get("history_note_ja") or "").strip() and not tr[e["_slug"]].get("history_note"))]
+    if missing:
+        raise SystemExit(f"en.json に訳が無い（または欄が足りない）項目: {missing}")
+    stale = []
+    for e in entries:
+        e["_en"] = tr[e["_slug"]]
+        if e["_en"].get("src") != ja_source_hash(e):
+            stale.append(e["_slug"])
+    return stale
+
+def hreflang_links(ja_url, en_url):
+    """日本語版と英語版を相互に結ぶ hreflang（x-default は日本語）。両方のページに同じものを入れる。"""
+    return (f'<link rel="alternate" hreflang="ja" href="{ja_url}">\n'
+            f'<link rel="alternate" hreflang="en" href="{en_url}">\n'
+            f'<link rel="alternate" hreflang="x-default" href="{ja_url}">\n')
+
+def lang_switch(href, L):
+    """日本語版⇄英語版の切替リンク（切替先の言語で表示）。"""
+    to = "en" if L["lang"] == "ja" else "ja"
+    return f'<a class="lang-sw" href="{href}" hreflang="{to}" lang="{to}">{esc(L["ui"]["lang_switch"])}</a>'
+
 def author_key(a):
     m = re.search(r"[A-Za-z]{2,}", a or "")
     return m.group(0).lower() if m else re.sub(r"\s+", "", (a or ""))
@@ -112,98 +255,118 @@ def assign_slugs(entries):
     if dup:
         raise SystemExit(f"slug が重複しています: {dup}")
 
-def search_blob(e):
-    parts = [e.get("name_ja",""), e.get("name_original",""), e.get("author",""),
-             e.get("journal",""), e.get("paper_title",""), e.get("significance_ja",""),
-             CAT.get(e.get("category_key",""), ("",""))[0]]
-    for p in e.get("papers", []) or []:
-        parts += [p.get("author",""), p.get("title",""), p.get("journal","")]
+def search_blob(e, L=None):
+    L = L or L_JA
+    parts = [tx(e, "name", L), e.get("name_original",""), tx(e, "author", L),
+             tx(e, "journal", L), tx(e, "paper_title", L), tx(e, "significance", L),
+             cat_label_color(e, L)[0]]
+    for i, p in enumerate(e.get("papers", []) or []):
+        parts += [ptx(e, i, p, "author", L), ptx(e, i, p, "title", L), ptx(e, i, p, "journal", L)]
     return re.sub(r"\s+", " ", " ".join(parts)).lower()
 
-def render_sources(e, prefix=""):
+def render_sources(e, prefix="", L=None):
     """単一urlの従来項目 → 1リンク。papers[]付き項目 → 複数論文リスト（原著/PDF/日本語解説リンク）。
-    prefix は日本語解説への相対パスの前置き（個別ページ entries/ からは "../"）。"""
+    prefix は日本語解説への相対パスの前置き（個別ページ entries/ からは "../"、英語の個別ページからは "../../"）。"""
+    L = L or L_JA
+    U = L["ui"]
     papers = e.get("papers")
     if not papers:
         return (f'<a class="src" href="{esc(e.get("url",""))}" target="_blank" rel="noopener noreferrer">'
-                f'原著・出典を見る<span aria-hidden="true"> ↗</span></a>')
+                f'{esc(U["view_source"])}<span aria-hidden="true"> ↗</span></a>')
+    # 英語ページから日本語解説へのリンクには hreflang/lang を付ける
+    jp_attr = ' hreflang="ja"' if L["lang"] != "ja" else ""
     rows = []
-    for p in papers:
+    for i, p in enumerate(papers):
+        label = ptx(e, i, {"link_label": p.get("link_label", "原著・抄録")}, "link_label", L)
         links = [f'<a href="{esc(p.get("url",""))}" target="_blank" rel="noopener noreferrer">'
-                 f'{esc(p.get("link_label","原著・抄録"))}<span aria-hidden="true"> ↗</span></a>']
+                 f'{esc(label)}<span aria-hidden="true"> ↗</span></a>']
         if p.get("pdf"):
             links.append(f'<a class="pdf" href="{esc(p["pdf"])}" target="_blank" rel="noopener noreferrer">'
                          f'PDF<span aria-hidden="true"> ↓</span></a>')
         if p.get("commentary"):
-            links.append(f'<a class="jp" href="{esc(prefix + p["commentary"])}">'
-                         f'日本語解説<span aria-hidden="true"> →</span></a>')
-        kind = p.get("kind", "")
+            links.append(f'<a class="jp" href="{esc(prefix + p["commentary"])}"{jp_attr}>'
+                         f'{esc(U["jp_commentary"])}<span aria-hidden="true"> →</span></a>')
+        kind = ptx(e, i, p, "kind", L)
         kind_html = f'<span class="p-kind">{esc(kind)}</span>' if kind else ""
         rows.append(
             '<li class="paper">'
             f'<span class="p-yr">{esc(p.get("year",""))}</span>'
             '<span class="p-body">'
-            f'<span class="p-head">{kind_html}<span class="p-au">{esc(p.get("author",""))}</span></span>'
-            f'<cite class="p-ti">{esc(p.get("title",""))}</cite>'
-            f'<span class="p-jr">{esc(p.get("journal",""))}</span>'
+            f'<span class="p-head">{kind_html}<span class="p-au">{esc(ptx(e, i, p, "author", L))}</span></span>'
+            f'<cite class="p-ti">{esc(ptx(e, i, p, "title", L))}</cite>'
+            f'<span class="p-jr">{esc(ptx(e, i, p, "journal", L))}</span>'
             f'<span class="p-links">{" ".join(links)}</span>'
             '</span></li>'
         )
-    return ('<div class="papers"><p class="papers-h">原著・関連論文</p>'
+    return (f'<div class="papers"><p class="papers-h">{esc(U["papers_h"])}</p>'
             f'<ol class="paper-list">{"".join(rows)}</ol></div>')
 
-def cat_label_color(e):
-    return CAT.get(e.get("category_key", "extra"), ("基礎・その他", "#5F6B63"))
-
-def render_card(e, idx):
+def cat_label_color(e, L=None):
+    L = L or L_JA
     key = e.get("category_key", "extra")
-    label, color = cat_label_color(e)
+    if key not in CAT:
+        key = "extra"
+    return L["cat"][key], CAT[key][1]
+
+def first_badge(L, cls="first"):
+    """「世界初」の印。日本語は丸囲みの「初」、英語は「1st」（幅を文字に合わせる）。"""
+    extra = "" if L["lang"] == "ja" else f" {cls}-en"
+    return f'<span class="{cls}{extra}" title="{esc(L["ui"]["first_title"])}">{esc(L["ui"]["first_badge"])}</span>'
+
+def render_card(e, idx, L=None):
+    L = L or L_JA
+    U = L["ui"]
+    key = e.get("category_key", "extra")
+    label, color = cat_label_color(e, L)
     ys = e.get("year_sort", 0)
     conf = e.get("confidence", "high")
     dt_attr = f' datetime="{ys:04d}"' if isinstance(ys, int) and ys > 0 else ""
     first = e.get("is_first")
-    blob = search_blob(e)
-    note = (e.get("history_note_ja") or "").strip()
+    blob = search_blob(e, L)
+    note = tx(e, "history_note", L).strip()
     note_html = ""
     if note:
         note_html = (
-            '<details class="note"><summary>歴史注・「世界初」の背景</summary>'
+            f'<details class="note"><summary>{esc(U["note_summary"])}</summary>'
             f'<p>{esc(note)}</p></details>'
         )
     conf_html = ""
     if conf == "medium":
-        conf_html = '<p class="conf-tag" title="年代・出典に史料的な幅があります">※ 史料に諸説あり</p>'
+        conf_html = f'<p class="conf-tag" title="{esc(U["conf_medium_title"])}">{esc(U["conf_medium_tag"])}</p>'
     elif conf == "low":
-        conf_html = '<p class="conf-tag conf-low-tag">※ 出典は要確認</p>'
-    first_html = '<span class="first" title="世界で初めて行われた（とされる）里程標">初</span>' if first else ""
+        conf_html = f'<p class="conf-tag conf-low-tag">{esc(U["conf_low_tag"])}</p>'
+    first_html = first_badge(L) if first else ""
+    og = orig_name(e, L)
+    og_html = f'<p class="og">{esc(og)}</p>' if (og or L["lang"] == "ja") else ""
     has_papers = bool(e.get("papers"))
     meta_html = "" if has_papers else (
-        f'<p class="au">{esc(e.get("author",""))}</p>'
-        f'<p class="pp"><cite>{esc(e.get("paper_title",""))}</cite></p>'
-        f'<p class="jr">{esc(e.get("journal",""))}</p>'
+        f'<p class="au">{esc(tx(e, "author", L))}</p>'
+        f'<p class="pp"><cite>{esc(tx(e, "paper_title", L))}</cite></p>'
+        f'<p class="jr">{esc(tx(e, "journal", L))}</p>'
     )
     return (
         f'<article class="card conf-{esc(conf)}" data-cat="{esc(key)}" data-first="{1 if first else 0}" '
         f'data-year="{ys}" data-search="{esc(blob)}" id="e{idx}">'
         f'<header class="card-h"><time class="yr"{dt_attr}>{esc(e.get("year_display",""))}</time>'
         f'<span class="chip" style="--c:{color}">{icon(key, "chip-ic")}{esc(label)}</span>{first_html}</header>'
-        f'<h2 class="nm"><a href="entries/{esc(e["_slug"])}.html">{esc(e.get("name_ja",""))}</a></h2>'
-        f'<p class="og">{esc(e.get("name_original",""))}</p>'
+        f'<h2 class="nm"><a href="entries/{esc(e["_slug"])}.html">{esc(tx(e, "name", L))}</a></h2>'
+        f'{og_html}'
         f'{meta_html}'
-        f'<p class="sig">{esc(e.get("significance_ja",""))}</p>'
+        f'<p class="sig">{esc(tx(e, "significance", L))}</p>'
         f'{conf_html}{note_html}'
-        f'{render_sources(e)}'
-        f'<a class="more" href="entries/{esc(e["_slug"])}.html">この術式のページへ<span aria-hidden="true"> →</span></a>'
+        f'{render_sources(e, prefix="" if L["lang"] == "ja" else "../", L=L)}'
+        f'<a class="more" href="entries/{esc(e["_slug"])}.html">{esc(U["more"])}<span aria-hidden="true"> →</span></a>'
         f'</article>'
     )
 
-def render_chips(entries):
+def render_chips(entries, L=None):
+    L = L or L_JA
     counts = collections.Counter(e.get("category_key", "extra") for e in entries)
     chips = [f'<button class="chip-f" type="button" data-cat="all" aria-pressed="true">'
-             f'<span class="dot" style="--c:var(--ink)"></span>すべて <span class="n">{len(entries)}</span></button>']
+             f'<span class="dot" style="--c:var(--ink)"></span>{esc(L["ui"]["chip_all"])} <span class="n">{len(entries)}</span></button>']
     for k in CAT_ORDER:
         if counts.get(k):
-            label, color = CAT[k]
+            label, color = L["cat"][k], CAT[k][1]
             chips.append(
                 f'<button class="chip-f" type="button" data-cat="{k}" aria-pressed="false">'
                 f'<span class="ci" style="color:{color}">{icon(k)}</span>{esc(label)} <span class="n">{counts[k]}</span></button>'
@@ -486,6 +649,12 @@ footer b{color:var(--ink)}
 @media (max-width:640px){.hero-emblem{display:none}}
 @media (prefers-reduced-motion:no-preference){.hero-emblem .arc{stroke-dasharray:270;stroke-dashoffset:270;animation:draw 2.2s .25s ease forwards}@keyframes draw{to{stroke-dashoffset:0}}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+/* 日本語版⇄英語版の切替（ヘッダー右上） */
+.lang-sw{position:absolute;top:12px;right:0;z-index:1;font-size:12.5px;font-weight:600;line-height:1.5;text-decoration:none;color:var(--accent);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:2px 12px}
+.lang-sw:hover{border-color:var(--accent)}
+.mast-in>.crumb,.mast-in>.eyebrow{padding-right:96px}
+/* 英語版の「世界初」印は「1st」なので丸ではなく文字幅に合わせる */
+.first-en,.tl-first-en{width:auto;border-radius:999px;padding:0 6px;font-family:var(--mono);font-size:10.5px;letter-spacing:0}
 """
 
 JS = r"""
@@ -498,7 +667,9 @@ JS = r"""
   var activeCat='all';
   var ENTRIES=JSON.parse(document.getElementById('entries').textContent);
   var CATCOLOR=JSON.parse(document.getElementById('catcolor').textContent);
-  var ERAS=[[-100000,999,"古代・中世"],[1000,1799,"近世（16–18世紀）"],[1800,1899,"19世紀"],[1900,1949,"20世紀前半"],[1950,1979,"戦後 ― マイクロサージャリーの幕開け"],[1980,1999,"皮弁・穿通枝の時代"],[2000,3000,"現代"]];
+  // 時代区分と「世界初」の印は言語ごとに build.py が JSON で渡す
+  var TL=JSON.parse(document.getElementById('tlconf').textContent);
+  var ERAS=TL.eras;
 
   // ---- timeline build ----
   var tl=document.getElementById('timeline');
@@ -515,7 +686,7 @@ JS = r"""
       a.innerHTML='<span class="tl-yr">'+e.yd+'</span><span class="tl-body">'
         +'<span class="tl-dot" style="background:'+color+'"></span>'
         +'<span class="n">'+e.nm+'</span> <span class="o">'+e.og+'</span>'
-        +(e.first?'<span class="tl-first" title="世界初">初</span>':'')
+        +(e.first?'<span class="'+TL.firstCls+'" title="'+TL.firstTitle+'">'+TL.first+'</span>':'')
         +'<span class="a">'+e.au+'</span></span>';
       sec.appendChild(a);
     });
@@ -567,38 +738,62 @@ JS = r"""
 })();
 """
 
-def build_body(entries, episode=None):
-    cards = "\n".join(render_card(e, i) for i, e in enumerate(entries))
-    chips = render_chips(entries)
+def build_body(entries, episode=None, L=None):
+    L = L or L_JA
+    U = L["ui"]
+    en = L["lang"] != "ja"
+    cards = "\n".join(render_card(e, i, L) for i, e in enumerate(entries))
+    chips = render_chips(entries, L)
     firsts = sum(1 for e in entries if e.get("is_first"))
     tl_entries = [{
         "y": e.get("year_sort", 0), "yd": e.get("year_display", ""),
-        "nm": e.get("name_ja", ""), "og": e.get("name_original", ""),
-        "au": e.get("author", ""), "ck": e.get("category_key", "extra"),
+        "nm": tx(e, "name", L), "og": orig_name(e, L),
+        "au": tx(e, "author", L), "ck": e.get("category_key", "extra"),
         "url": e.get("url", ""), "first": bool(e.get("is_first")),
-        "q": search_blob(e),
+        "q": search_blob(e, L),
     } for e in entries]
     catcolor = {k: v[1] for k, v in CAT.items()}
-    pod = render_pod(episode)
+    tlconf = {"eras": [[lo, hi, lab] for (lo, hi, _), lab in zip(ERAS, L["eras"])],
+              "first": U["first_badge"], "firstTitle": U["tl_first_title"],
+              "firstCls": "tl-first tl-first-en" if en else "tl-first"}
+    # 音声（ポッドキャスト）は日本語のみなので英語版には出さない
+    pod = "" if en else render_pod(episode)
     search_svg = ('<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round">'
                   '<circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>')
-    body = f"""<header class="mast"><div class="wrap mast-in">
-{HERO_SVG}
+    today = datetime.date.today().isoformat()
+    if en:
+        # 英語版トップ（一覧）。en/index.html から日本語版トップは "../"
+        head_html = f"""{lang_switch("../", L)}
+<p class="eyebrow">{esc(U["eyebrow"])}</p>
+<h1 class="title">{esc(U["site_name"])}</h1>
+<p class="thesis">{U["thesis"]}</p>
+<p class="stat">{U["stat"].format(n=len(entries), firsts=firsts)}</p>"""
+        foot_html = (f'<p>{U["footer_1"]}</p>\n<p>{esc(U["footer_2"])}</p>\n'
+                     f'<p>{esc(U["footer_translation"])}</p>\n'
+                     f'<p>{esc(U["footer_3"].format(n=len(entries), date=today))}</p>')
+    else:
+        head_html = f"""{lang_switch("en/", L)}
 <p class="eyebrow">形成外科 原典データベース</p>
 <h1 class="title">術式の系譜<span class="en">Genealogy of Reconstructive Operations</span></h1>
 <p class="thesis">紀元前600年のスシュルタから現代まで ― 形成外科を形づくった術式・皮弁・植皮・マイクロサージャリーの<b>原著論文</b>と、それを<b>世界で初めて行った人</b>を、一次資料へのリンク付きで年代順にたどる。</p>
-<p class="stat"><b>{len(entries)}</b> 術式・原著 ／ 前600年〜2005年 ／ うち <b>{firsts}</b> 件が「世界初」の里程標</p>
+<p class="stat"><b>{len(entries)}</b> 術式・原著 ／ 前600年〜2005年 ／ うち <b>{firsts}</b> 件が「世界初」の里程標</p>"""
+        foot_html = f"""<p><b>術式の系譜</b> ― 形成外科の術式・原著論文を一次資料の出典リンク付きで収録した非営利のデータベース。各項目は複数エージェントによるWeb検証を経ています。</p>
+<p>年代・出典に史料的な幅がある項目には「※ 史料に諸説あり」を付しています。医学的判断・引用の際は必ずリンク先の原著・一次資料をご確認ください。誤り・追加のご指摘は歓迎します。</p>
+<p>データ {len(entries)} 項目 ／ 最終更新 {today}</p>"""
+    body = f"""<header class="mast"><div class="wrap mast-in">
+{HERO_SVG}
+{head_html}
 <div class="controls">
-<div class="search"><label for="q" class="sr-only" style="position:absolute;left:-9999px">検索</label>{search_svg}
-<input id="q" type="search" autocomplete="off" placeholder="術式・人名・皮弁名で検索（例：皮弁, Koshima, TRAM, 鼻）"></div>
-<div class="views" role="group" aria-label="表示切替">
-<button id="v-list" type="button" aria-pressed="true">一覧</button>
-<button id="v-tl" type="button" aria-pressed="false">年表</button></div>
-<div class="views density" role="group" aria-label="情報量の切替">
-<button id="d-full" type="button" aria-pressed="true">詳細表示</button>
-<button id="d-simple" type="button" aria-pressed="false">シンプル表示</button></div>
+<div class="search"><label for="q" class="sr-only" style="position:absolute;left:-9999px">{esc(U["search_label"])}</label>{search_svg}
+<input id="q" type="search" autocomplete="off" placeholder="{esc(U["search_placeholder"])}"></div>
+<div class="views" role="group" aria-label="{esc(U["views_label"])}">
+<button id="v-list" type="button" aria-pressed="true">{esc(U["view_list"])}</button>
+<button id="v-tl" type="button" aria-pressed="false">{esc(U["view_tl"])}</button></div>
+<div class="views density" role="group" aria-label="{esc(U["density_label"])}">
+<button id="d-full" type="button" aria-pressed="true">{esc(U["density_full"])}</button>
+<button id="d-simple" type="button" aria-pressed="false">{esc(U["density_simple"])}</button></div>
 </div>
-<div class="chips" role="group" aria-label="カテゴリで絞り込み">
+<div class="chips" role="group" aria-label="{esc(U["chips_label"])}">
 {chips}
 </div>
 </div></header>
@@ -606,17 +801,16 @@ def build_body(entries, episode=None):
 <main class="wrap">
 <div class="grid" id="list">
 {cards}
-<p class="empty" id="empty" style="display:none">該当する術式が見つかりません。検索語やカテゴリを変えてお試しください。</p>
+<p class="empty" id="empty" style="display:none">{esc(U["empty"])}</p>
 </div>
-<div class="tl" id="timeline" aria-label="年表"></div>
+<div class="tl" id="timeline" aria-label="{esc(U["tl_label"])}"></div>
 </main>
 <footer><div class="wrap">
-<p><b>術式の系譜</b> ― 形成外科の術式・原著論文を一次資料の出典リンク付きで収録した非営利のデータベース。各項目は複数エージェントによるWeb検証を経ています。</p>
-<p>年代・出典に史料的な幅がある項目には「※ 史料に諸説あり」を付しています。医学的判断・引用の際は必ずリンク先の原著・一次資料をご確認ください。誤り・追加のご指摘は歓迎します。</p>
-<p>データ {len(entries)} 項目 ／ 最終更新 {datetime.date.today().isoformat()}</p>
+{foot_html}
 </div></footer>
 <script id="entries" type="application/json">{json.dumps(tl_entries, ensure_ascii=False)}</script>
 <script id="catcolor" type="application/json">{json.dumps(catcolor, ensure_ascii=False)}</script>
+<script id="tlconf" type="application/json">{json.dumps(tlconf, ensure_ascii=False)}</script>
 <script>{JS}</script>"""
     return body
 
@@ -697,7 +891,10 @@ def render_commentary_page(d, base, entry_links=(), og_image=""):
         glossary = f'<div class="glossary"><h2>用語ミニ辞典</h2><dl>{items}</dl></div>'
     title = f'{d.get("title_ja","")}｜術式の系譜'
     desc = (d.get("lead","") or "")[:110]
+    # 解説は日本語のみ。「English」は参照元の項目の英語ページへ（無ければ英語版トップ）
+    en_href = f"../en/entries/{esc(entry_links[0][0])}.html" if entry_links else "../en/"
     body = f"""<header class="mast"><div class="wrap mast-in">
+{lang_switch(en_href, L_JA)}
 <p class="crumb"><a href="../">術式の系譜</a> ／ 論文 日本語解説</p>
 <p class="eyebrow">{esc(d.get("flap_ja",""))}</p>
 <h1 class="title" style="font-size:clamp(23px,3.6vw,34px)">{esc(d.get("title_ja",""))}</h1>
@@ -795,135 +992,161 @@ def commentary_slugs(e):
             out.append(m.group(1))
     return out
 
-def entry_citations(e):
+def entry_citations(e, L=None):
     """JSON-LD の citation（原著）。papers[] があればその各論文、無ければ項目の出典1件。"""
+    L = L or L_JA
     if e.get("papers"):
         cites = []
-        for p in e["papers"]:
-            c = {"@type": "CreativeWork", "name": p.get("title", ""),
-                 "author": {"@type": "Person", "name": p.get("author", "")},
-                 "isPartOf": p.get("journal", ""), "url": p.get("url", "")}
+        for i, p in enumerate(e["papers"]):
+            c = {"@type": "CreativeWork", "name": ptx(e, i, p, "title", L),
+                 "author": {"@type": "Person", "name": ptx(e, i, p, "author", L)},
+                 "isPartOf": ptx(e, i, p, "journal", L), "url": p.get("url", "")}
             m = re.search(r"\d{4}", str(p.get("year", "")))
             if m:
                 c["datePublished"] = m.group(0)
             cites.append(c)
         return cites
-    c = {"@type": "CreativeWork", "name": e.get("paper_title", ""),
-         "author": {"@type": "Person", "name": e.get("author", "")},
-         "isPartOf": e.get("journal", ""), "url": e.get("url", "")}
+    c = {"@type": "CreativeWork", "name": tx(e, "paper_title", L),
+         "author": {"@type": "Person", "name": tx(e, "author", L)},
+         "isPartOf": tx(e, "journal", L), "url": e.get("url", "")}
     if year_of(e):
         c["datePublished"] = year_of(e)
     return [c]
 
-def render_entry_page(e, entries, base, og_image):
+def render_entry_page(e, entries, base, og_image, L=None):
+    """個別ページ。日本語は entries/<slug>.html、英語は en/entries/<slug>.html（slug は共通）。"""
+    L = L or L_JA
+    U = L["ui"]
+    en = L["lang"] != "ja"
     slug = e["_slug"]
-    url = f"{base}/entries/{slug}.html"
+    ja_url = f"{base}/entries/{slug}.html"
+    en_url = f"{base}/en/entries/{slug}.html"
+    url = en_url if en else ja_url
+    home = f"{base}/en/" if en else base + "/"
+    # 日本語解説（papers/）への相対パス：英語の個別ページは一段深い
+    up = "../../" if en else "../"
     key = e.get("category_key", "extra")
-    label, color = cat_label_color(e)
-    name = e.get("name_ja", "")
+    label, color = cat_label_color(e, L)
+    name = tx(e, "name", L)
     yd = e.get("year_display", "")
     conf = e.get("confidence", "high")
     first = e.get("is_first")
-    note = (e.get("history_note_ja") or "").strip()
-    sig = (e.get("significance_ja") or "").strip()
+    note = tx(e, "history_note", L).strip()
+    sig = tx(e, "significance", L).strip()
 
     conf_html = ""
     if conf == "medium":
-        conf_html = ('<p class="conf-box">※ 史料に諸説あり'
-                     '<span>年代・出典に史料的な幅があります。引用の際は下記の原著・一次資料で必ずご確認ください。</span></p>')
+        conf_html = (f'<p class="conf-box">{esc(U["conf_box_medium"])}'
+                     f'<span>{esc(U["conf_box_medium_sub"])}</span></p>')
     elif conf == "low":
-        conf_html = ('<p class="conf-box">※ 出典は要確認'
-                     '<span>出典・年代が十分に確認できていません。引用の際は下記の原著・一次資料で必ずご確認ください。</span></p>')
-    conf_label = {"high": "high（出典確認済み）", "medium": "medium（史料に諸説あり）",
-                  "low": "low（要確認）"}.get(conf, esc(conf))
-    first_html = '<span class="first" title="世界で初めて行われた（とされる）里程標">初</span>' if first else ""
-    first_txt = "「世界初」とされる里程標" if first else "―（「世界初」の指定なし）"
+        conf_html = (f'<p class="conf-box">{esc(U["conf_box_low"])}'
+                     f'<span>{esc(U["conf_box_low_sub"])}</span></p>')
+    conf_label = {"high": U["conf_high_label"], "medium": U["conf_medium_label"],
+                  "low": U["conf_low_label"]}.get(conf, conf)
+    first_html = first_badge(L) if first else ""
+    first_txt = U["first_yes"] if first else U["first_no"]
 
     if e.get("papers"):
-        src_html = render_sources(e, prefix="../")
+        src_html = render_sources(e, prefix=up, L=L)
     else:
         src_html = (
             '<div class="cite-box">'
-            f'<span class="c-au">{esc(e.get("author",""))}</span>'
-            f'<cite class="c-ti">{esc(e.get("paper_title",""))}</cite>'
-            f'<span class="c-jr">{esc(e.get("journal",""))}</span>'
+            f'<span class="c-au">{esc(tx(e, "author", L))}</span>'
+            f'<cite class="c-ti">{esc(tx(e, "paper_title", L))}</cite>'
+            f'<span class="c-jr">{esc(tx(e, "journal", L))}</span>'
             f'<span class="c-links"><a href="{esc(e.get("url",""))}" target="_blank" rel="noopener noreferrer">'
-            '原著・出典を見る<span aria-hidden="true"> ↗</span></a></span></div>')
+            f'{esc(U["view_source"])}<span aria-hidden="true"> ↗</span></a></span></div>')
 
     cslugs = commentary_slugs(e)
     jp_html = ""
     if cslugs:
-        ls = "".join(f'<li><a href="../papers/{esc(s)}.html">日本語解説を読む（{esc(s)}）<span aria-hidden="true"> →</span></a></li>'
+        jp_attr = ' hreflang="ja"' if en else ""
+        ls = "".join(f'<li><a href="{up}papers/{esc(s)}.html"{jp_attr}>{esc(U["jp_box_link"].format(slug=s))}<span aria-hidden="true"> →</span></a></li>'
                      for s in cslugs)
-        jp_html = (f'<div class="jp-box">この術式には原著の日本語解説ページがあります。'
+        jp_html = (f'<div class="jp-box">{esc(U["jp_box"])}'
                    f'<ul style="margin:6px 0 0;padding-left:20px">{ls}</ul></div>')
 
     rel = related_entries(e, entries)
-    tl_first = '<span class="tl-first" title="世界初">初</span>'
+    tl_cls = "tl-first tl-first-en" if en else "tl-first"
+    tl_first = f'<span class="{tl_cls}" title="{esc(U["tl_first_title"])}">{esc(U["first_badge"])}</span>'
     rel_rows = "".join(
         f'<a class="tl-row" href="{esc(x["_slug"])}.html"><span class="tl-yr">{esc(x.get("year_display",""))}</span>'
         f'<span class="tl-body"><span class="tl-dot" style="background:{color}"></span>'
-        f'<span class="n">{esc(x.get("name_ja",""))}</span> <span class="o">{esc(x.get("name_original",""))}</span>'
+        f'<span class="n">{esc(tx(x, "name", L))}</span> <span class="o">{esc(x.get("name_original",""))}</span>'
         f'{tl_first if x.get("is_first") else ""}'
-        f'<span class="a">{esc(x.get("author",""))}</span></span></a>' for x in rel)
-    rel_html = (f'<section class="related"><h2>同じカテゴリの術式（{esc(label)}）</h2>{rel_rows}</section>'
+        f'<span class="a">{esc(tx(x, "author", L))}</span></span></a>' for x in rel)
+    rel_html = (f'<section class="related"><h2>{esc(U["h_related"].format(label=label))}</h2>{rel_rows}</section>'
                 if rel else "")
 
-    note_html = f'<section><h2>歴史メモ・「世界初」の背景</h2><p>{esc(note)}</p></section>' if note else ""
-    sig_html = f'<section><h2>意義</h2><p>{esc(sig)}</p></section>' if sig else ""
+    note_html = f'<section><h2>{esc(U["h_note"])}</h2><p>{esc(note)}</p></section>' if note else ""
+    sig_html = f'<section><h2>{esc(U["h_significance"])}</h2><p>{esc(sig)}</p></section>' if sig else ""
 
-    title = f"{name}（{yd}）｜術式の系譜"
-    desc = f"{name}（{e.get('name_original','')}、{yd}）。{sig}"
-    if len(desc) > 120:
-        desc = desc[:119] + "…"
+    title = U["entry_title"].format(name=name, year=yd)
+    og = orig_name(e, L)
+    if en:
+        desc = f"{name} ({og}, {yd}). {sig}" if og else f"{name} ({yd}). {sig}"
+        if len(desc) > 160:
+            desc = desc[:159].rsplit(" ", 1)[0] + "…"
+    else:
+        desc = f"{name}（{e.get('name_original','')}、{yd}）。{sig}"
+        if len(desc) > 120:
+            desc = desc[:119] + "…"
 
+    webpage = {"@type": "WebPage", "@id": url, "url": url, "name": title, "inLanguage": L["html_lang"],
+               "description": desc, "isPartOf": {"@id": base + "#website"},
+               "breadcrumb": {"@id": url + "#breadcrumb"},
+               "about": {"@type": "Thing", "name": name, "alternateName": e.get("name_original", "")},
+               "citation": entry_citations(e, L)}
+    if en:
+        webpage["translationOfWork"] = {"@id": ja_url}
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "@id": url + "#breadcrumb", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "術式の系譜", "item": base + "/"},
+            {"@type": "ListItem", "position": 1, "name": U["site_name"], "item": home},
             {"@type": "ListItem", "position": 2, "name": name, "item": url}]},
-        {"@type": "WebPage", "@id": url, "url": url, "name": title, "inLanguage": "ja",
-         "description": desc, "isPartOf": {"@id": base + "#website"},
-         "breadcrumb": {"@id": url + "#breadcrumb"},
-         "about": {"@type": "Thing", "name": name, "alternateName": e.get("name_original", "")},
-         "citation": entry_citations(e)},
+        webpage,
     ]}
+    og_html = f'<p class="og">{esc(og)}</p>\n' if (og or not en) else ""
+    sep = " / " if en else " ／ "
+    switch = lang_switch(f"../../entries/{esc(slug)}.html" if en else f"../en/entries/{esc(slug)}.html", L)
     body = f"""<header class="mast"><div class="wrap mast-in">
-<nav class="crumb" aria-label="パンくず"><a href="../">術式の系譜</a> ／ {esc(label)} ／ {esc(name)}</nav>
+{switch}
+<nav class="crumb" aria-label="{esc(U["crumb_label"])}"><a href="../">{esc(U["site_name"])}</a>{sep}{esc(label)}{sep}{esc(name)}</nav>
 <div class="entry-h"><time class="yr"{f' datetime="{year_of(e)}"' if year_of(e) else ""}>{esc(yd)}</time><span class="chip" style="--c:{color}">{icon(key, "chip-ic")}{esc(label)}</span>{first_html}</div>
 <h1 class="title" style="font-size:clamp(23px,3.6vw,34px)">{esc(name)}</h1>
-<p class="og">{esc(e.get("name_original",""))}</p>
-</div></header>
+{og_html}</div></header>
 <main class="wrap paper-page entry-page">
 {conf_html}
 <dl class="facts">
-<dt>人物</dt><dd>{esc(e.get("author",""))}</dd>
-<dt>年</dt><dd>{esc(yd)}</dd>
-<dt>カテゴリ</dt><dd>{esc(label)}</dd>
-<dt>世界初</dt><dd>{first_txt}</dd>
-<dt>信頼度</dt><dd>{conf_label}</dd>
+<dt>{esc(U["fact_person"])}</dt><dd>{esc(tx(e, "author", L))}</dd>
+<dt>{esc(U["fact_year"])}</dt><dd>{esc(yd)}</dd>
+<dt>{esc(U["fact_category"])}</dt><dd>{esc(label)}</dd>
+<dt>{esc(U["fact_first"])}</dt><dd>{esc(first_txt)}</dd>
+<dt>{esc(U["fact_conf"])}</dt><dd>{esc(conf_label)}</dd>
 </dl>
-<section><h2>原著・出典</h2>{src_html}</section>
+<section><h2>{esc(U["h_sources"])}</h2>{src_html}</section>
 {jp_html}
 {sig_html}
 {note_html}
 {rel_html}
-<p class="disclaimer">本ページは形成外科の医学史の教育・参照を目的とした非営利のまとめです。年代・出典に史料的な幅がある項目があります。臨床判断・学術引用の際は必ずリンク先の原著・一次資料をご確認ください。</p>
-<a class="backlink" href="../">← 術式の系譜（一覧）に戻る</a>
+<p class="disclaimer">{esc(U["disclaimer"])}</p>
+<a class="backlink" href="../">{esc(U["backlink"])}</a>
 </main>"""
     # 【2026-10-12】f-string内にバックスラッシュを書けない Python 3.10 対策で外に出す
     ld_json = json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")
+    alt = hreflang_links(ja_url, en_url)
     return f"""<!doctype html>
-<html lang="ja"><head>
+<html lang="{L["html_lang"]}"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="山形孝介">
 <link rel="canonical" href="{url}">
-<meta name="robots" content="index,follow">
+{alt}<meta name="robots" content="index,follow">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="術式の系譜">
-<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="{esc(U["site_name"])}">
+<meta property="og:locale" content="{L["og_locale"]}">
+<meta property="og:locale:alternate" content="{L["og_locale_alt"]}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{url}">
@@ -940,15 +1163,69 @@ def render_entry_page(e, entries, base, og_image):
 {body}
 </body></html>"""
 
-def build_entries(entries, base, og_image):
-    out = DIST / "entries"
+def build_entries(entries, base, og_image, L=None):
+    L = L or L_JA
+    out = DIST / "entries" if L["lang"] == "ja" else DIST / L["lang"] / "entries"
     # 古い slug のページが残らないよう毎回作り直す
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
     for e in entries:
-        (out / f"{e['_slug']}.html").write_text(render_entry_page(e, entries, base, og_image), encoding="utf-8")
+        (out / f"{e['_slug']}.html").write_text(render_entry_page(e, entries, base, og_image, L), encoding="utf-8")
     return [e["_slug"] for e in entries]
+
+def render_index_en(entries, base, og_image, L):
+    """英語版トップ（dist/en/index.html）。本文・検索・絞り込み・年表は日本語版と同じ仕組み。"""
+    U = L["ui"]
+    url = f"{base}/en/"
+    title = U["index_title"]
+    desc = U["index_desc"].format(n=len(entries))
+    body = build_body(entries, None, L)
+    items = [{"@type": "ListItem", "position": i, "name": tx(e, "name", L),
+              "url": f"{base}/en/entries/{e['_slug']}.html"} for i, e in enumerate(entries, 1)]
+    ld = {"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "@id": url + "#breadcrumb", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": U["site_name"], "item": url}]},
+        {"@type": "WebPage", "@id": url, "url": url, "name": title, "inLanguage": "en",
+         "description": desc, "isPartOf": {"@id": base + "#website"},
+         "breadcrumb": {"@id": url + "#breadcrumb"}, "translationOfWork": {"@id": base + "/"},
+         "mainEntity": {"@type": "ItemList", "numberOfItems": len(entries),
+                        "itemListOrder": "https://schema.org/ItemListOrderAscending",
+                        "itemListElement": items}},
+    ]}
+    ld_json = json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")
+    alt = hreflang_links(base + "/", url)
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(title)}</title>
+<meta name="description" content="{esc(desc)}">
+<meta name="author" content="山形孝介">
+<link rel="canonical" href="{url}">
+{alt}<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{esc(U["site_name"])}">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{og_image}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(title)}">
+<meta name="twitter:description" content="{esc(desc)}">
+<meta name="twitter:image" content="{og_image}">
+<meta name="theme-color" content="#EFEBE2">
+<link rel="icon" href="{FAVICON}">
+<style>.sr-only{{position:absolute;left:-9999px}}{CSS}</style>
+<script type="application/ld+json">{ld_json}</script>
+</head>
+<body>
+{body}
+</body>
+</html>"""
 
 def main():
     ap = argparse.ArgumentParser()
@@ -959,6 +1236,11 @@ def main():
     gverify = (f'<meta name="google-site-verification" content="{esc(args.google_verify)}">\n' if args.google_verify else "")
     entries, raw_n = load_entries()
     assign_slugs(entries)
+    # 英語版の訳を読み込む（訳の無い項目があればここで止まる）
+    L_EN = make_lang("en", load_i18n("en"))
+    stale = attach_translations(entries, load_i18n("en"))
+    for s in stale:
+        print(f"WARNING: 日本語の原文が訳した後に変わっています（data/i18n/en.json の訳を見直し、src を更新）: {s}")
     episode = None
     epf = ROOT / "data" / "podcast_ep1.json"
     mf = ROOT / "data" / "ep1_meta.json"
@@ -1003,10 +1285,11 @@ def main():
 <meta name="author" content="山形孝介">
 <meta name="keywords" content="形成外科,再建外科,皮弁,植皮,マイクロサージャリー,原著論文,術式,医学史,DIEP,穿通枝皮弁,鼻形成,口唇裂">
 <link rel="canonical" href="{base}/">
-<meta name="robots" content="index,follow,max-image-preview:large">
+{hreflang_links(base + "/", base + "/en/")}<meta name="robots" content="index,follow,max-image-preview:large">
 {gverify}<meta property="og:type" content="website">
 <meta property="og:site_name" content="術式の系譜">
 <meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{base}/">
@@ -1040,16 +1323,33 @@ def main():
             entry_links[cs].append((e["_slug"], e.get("name_ja", "")))
     commentary_slugs_built = build_commentaries(base, entry_links, site_og)
 
-    # sitemap / robots
+    # 英語版（トップ＋全項目の個別ページ。日本語解説 papers/ は訳さずリンクのみ）
+    (DIST / "en").mkdir(exist_ok=True)
+    (DIST / "en" / "index.html").write_text(render_index_en(entries, base, site_og, L_EN), encoding="utf-8")
+    en_slugs = build_entries(entries, base, site_og, L_EN)
+
+    # sitemap / robots（日英の対応ページには xhtml:link で hreflang を併記）
     today = datetime.date.today().isoformat()
-    urls = [f'  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>']
-    urls += [f'  <url><loc>{base}/entries/{s}.html</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>'
+    def sm_url(loc, prio, pair=None):
+        alt = ""
+        if pair:
+            ja, en = pair
+            alt = (f'<xhtml:link rel="alternate" hreflang="ja" href="{ja}"/>'
+                   f'<xhtml:link rel="alternate" hreflang="en" href="{en}"/>'
+                   f'<xhtml:link rel="alternate" hreflang="x-default" href="{ja}"/>')
+        return (f'  <url><loc>{loc}</loc>{alt}<lastmod>{today}</lastmod>'
+                f'<changefreq>monthly</changefreq><priority>{prio}</priority></url>')
+    home_pair = (f"{base}/", f"{base}/en/")
+    urls = [sm_url(f"{base}/", "1.0", home_pair)]
+    urls += [sm_url(f"{base}/entries/{s}.html", "0.7", (f"{base}/entries/{s}.html", f"{base}/en/entries/{s}.html"))
              for s in entry_slugs]
-    urls += [f'  <url><loc>{base}/papers/{s}.html</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>'
-             for s in commentary_slugs_built]
+    urls += [sm_url(f"{base}/papers/{s}.html", "0.6") for s in commentary_slugs_built]
+    urls += [sm_url(f"{base}/en/", "0.9", home_pair)]
+    urls += [sm_url(f"{base}/en/entries/{s}.html", "0.6", (f"{base}/entries/{s}.html", f"{base}/en/entries/{s}.html"))
+             for s in en_slugs]
     (DIST / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         + "\n".join(urls) + "\n</urlset>\n", encoding="utf-8")
     (DIST / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
@@ -1067,7 +1367,7 @@ def main():
     (DIST / "og.svg").write_text(og, encoding="utf-8")
 
     print(f"built {len(entries)} entries (raw {raw_n}, collapsed {raw_n-len(entries)})")
-    print(f"entry pages: {len(entry_slugs)}")
+    print(f"entry pages: {len(entry_slugs)}  english entry pages: {len(en_slugs)} (+ en/index.html)")
     print(f"commentary pages: {len(commentary_slugs_built)} -> {commentary_slugs_built}")
     print("dist:", *(p.name for p in sorted(DIST.iterdir())))
     print("index.html bytes:", (DIST/'index.html').stat().st_size)

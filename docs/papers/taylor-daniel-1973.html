@@ -194,6 +194,12 @@ footer b{color:var(--ink)}
 @media (max-width:640px){.hero-emblem{display:none}}
 @media (prefers-reduced-motion:no-preference){.hero-emblem .arc{stroke-dasharray:270;stroke-dashoffset:270;animation:draw 2.2s .25s ease forwards}@keyframes draw{to{stroke-dashoffset:0}}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+/* 日本語版⇄英語版の切替（ヘッダー右上） */
+.lang-sw{position:absolute;top:12px;right:0;z-index:1;font-size:12.5px;font-weight:600;line-height:1.5;text-decoration:none;color:var(--accent);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:2px 12px}
+.lang-sw:hover{border-color:var(--accent)}
+.mast-in>.crumb,.mast-in>.eyebrow{padding-right:96px}
+/* 英語版の「世界初」印は「1st」なので丸ではなく文字幅に合わせる */
+.first-en,.tl-first-en{width:auto;border-radius:999px;padding:0 6px;font-family:var(--mono);font-size:10.5px;letter-spacing:0}
 
 figure.paper-fig{margin:22px 0;padding:0}
 figure.paper-fig img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid rgba(0,0,0,.14);background:#fff}
@@ -211,6 +217,7 @@ figure.paper-fig .fig-note{display:block;margin-top:4px;font-size:12.5px;color:#
 </style>
 </head><body>
 <header class="mast"><div class="wrap mast-in">
+<a class="lang-sw" href="../en/entries/1973-superficial-inferior-epigastric-artery-siea-flap.html" hreflang="en" lang="en">English</a>
 <p class="crumb"><a href="../">術式の系譜</a> ／ 論文 日本語解説</p>
 <p class="eyebrow">浅下腹壁動脈皮弁（SIEA皮弁）</p>
 <h1 class="title" style="font-size:clamp(23px,3.6vw,34px)">腹直筋も筋膜も切らずに下腹部の皮膚を移す ― 遊離皮弁時代の幕開けと浅下腹壁動脈皮弁（SIEA皮弁）の原点</h1>
